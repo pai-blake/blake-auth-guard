@@ -112,18 +112,28 @@ def init_transporter():
 
 def send_email(to_email: str, subject: str, html_content: str, text_content: str = '') -> bool:
     global _last_smtp_error
+    from email.utils import formatdate, make_msgid
+
     user, pass_ = get_credentials()
     if not user or not pass_:
         _last_smtp_error = 'EMAIL_USER and EMAIL_PASS are required in .env.'
         raise ValueError(_last_smtp_error)
 
+    # Extract sender domain for Message-ID alignment (e.g. gmail.com)
+    domain = user.split('@')[-1] if '@' in user else 'gmail.com'
+
     msg = MIMEMultipart('alternative')
     msg['Subject'] = subject
-    msg['From'] = f'AuthGuard <{user}>'
+    msg['From'] = f'AuthGuard Security <{user}>'
     msg['To'] = to_email
     msg['Reply-To'] = user
-    msg['X-Priority'] = '3'
+    msg['Date'] = formatdate(localtime=True)
+    msg['Message-ID'] = make_msgid(domain=domain)
+    msg['MIME-Version'] = '1.0'
+    msg['Auto-Submitted'] = 'auto-generated'
+    msg['X-Auto-Response-Suppress'] = 'All'
 
+    # Plain-text version MUST come first in multipart/alternative
     if text_content:
         msg.attach(MIMEText(text_content, 'plain', 'utf-8'))
     if html_content:

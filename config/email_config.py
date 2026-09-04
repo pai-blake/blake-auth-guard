@@ -20,8 +20,8 @@ _lock = threading.Lock()
 
 def get_credentials():
     load_dotenv(dotenv_path=ENV_PATH, override=True)
-    user = (os.getenv('EMAIL_USER') or '').strip()
-    pass_ = (os.getenv('EMAIL_PASS') or '').replace(' ', '')
+    user = (os.getenv('EMAIL_USER') or '').strip().strip('\'"')
+    pass_ = (os.getenv('EMAIL_PASS') or '').replace(' ', '').strip('\'"')
     return user, pass_
 
 def get_is_configured():

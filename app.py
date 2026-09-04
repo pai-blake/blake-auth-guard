@@ -15,8 +15,8 @@ import jinja2
 ROOT_DIR = Path(__file__).resolve().parent
 load_dotenv(dotenv_path=ROOT_DIR / '.env')
 
-# Detect if running on Render (or any production environment)
-IS_PRODUCTION = bool(os.getenv('RENDER') or os.getenv('FLASK_ENV') == 'production')
+# Detect if running on production (Render, Vercel, or FLASK_ENV=production)
+IS_PRODUCTION = bool(os.getenv('RENDER') or os.getenv('VERCEL') or os.getenv('FLASK_ENV') == 'production')
 
 
 def create_app():

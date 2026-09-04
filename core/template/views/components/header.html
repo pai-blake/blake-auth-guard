@@ -1,0 +1,12 @@
+{# Template Module Header — reuses the flexible general header with module branding #}
+{% with 
+    brand_prefix="Template",
+    brand_suffix="Core",
+    brand_icon="template",
+    show_back=True,
+    back_url="/home",
+    show_logout=True,
+    show_theme_toggle=True
+%}
+  {% include "general/views/components/header.html" %}
+{% endwith %}

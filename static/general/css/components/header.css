@@ -1,0 +1,202 @@
+/* ==========================================================================
+   AuthGuard — Application Header & Brand Navigation (Clean Top Navigation)
+   ========================================================================== */
+
+.app-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: transparent;
+  pointer-events: none;
+}
+
+/* Horizontal Brand Navigation */
+.brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+}
+
+.brand:hover {
+  transform: translateY(-1px);
+}
+
+.brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md, 10px);
+  background: var(--overlay-bg, linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.brand-icon svg {
+  width: 18px;
+  height: 18px;
+  max-width: 18px;
+  max-height: 18px;
+}
+
+.brand-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-headline);
+  letter-spacing: -0.02em;
+  text-transform: none;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.logo-candy {
+  background: var(--logo-gradient, linear-gradient(135deg, #6366f1 0%, #a855f7 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Header Right Actions (Horizontal row) */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  pointer-events: auto;
+}
+
+/* Back / Home Button */
+.btn-header-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  height: 38px;
+  border-radius: var(--r-md, 10px);
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-body);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-card);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-header-back:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-header-back svg {
+  flex-shrink: 0;
+}
+
+/* Theme Toggle Button */
+.theme-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md, 10px);
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.theme-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
+  transform: translateY(-1px);
+}
+
+.theme-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Log Out Button (Clean, modern pill button) */
+.btn-header-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.95rem;
+  height: 38px;
+  border-radius: var(--r-md, 10px);
+  border: 1.5px solid rgba(239, 68, 68, 0.28);
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  box-sizing: border-box;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-header-logout:hover {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-header-logout.hidden {
+  display: none !important;
+}
+
+.btn-header-logout svg {
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .app-header {
+    padding: 0 1rem;
+    height: 56px;
+  }
+  
+  .brand-name {
+    font-size: 1.05rem;
+  }
+  
+  .btn-header-logout span {
+    display: none;
+  }
+  
+  .btn-header-logout {
+    padding: 0;
+    width: 38px;
+    justify-content: center;
+  }
+}

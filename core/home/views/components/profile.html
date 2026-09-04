@@ -1,0 +1,142 @@
+<!-- ═══════════════════════════════════════════════════════════
+     LEFT PANEL — Profile Sidebar Component
+═══════════════════════════════════════════════════════════════ -->
+<aside class="hd-profile-panel" id="hd-profile-panel">
+
+  <!-- Panel Title -->
+  <div class="hd-panel-title">My Profile</div>
+
+  <!-- Avatar with Upload Trigger -->
+  <div class="hd-avatar-wrap">
+    <div class="hd-avatar" id="hd-avatar-display" title="Click to change profile photo" role="button" tabindex="0">
+      {% if user and (user.avatar or user.avatar_url or user.user_profile_photo) %}
+        <img src="{{ user.avatar or user.avatar_url or user.user_profile_photo }}" alt="Avatar" class="hd-avatar-img" id="hd-avatar-img">
+      {% else %}
+        <span class="hd-avatar-initials" id="hd-avatar-initials">{{ (user.name[0] if user and user.name else 'U') | upper }}</span>
+      {% endif %}
+      <div class="hd-avatar-hover-badge">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+    </div>
+    <input type="file" id="hd-avatar-input" accept="image/png,image/jpeg,image/webp,image/gif" style="display:none;">
+    <div class="hd-avatar-badge" title="Verified Account">✓</div>
+  </div>
+
+  <!-- User Info Header -->
+  <div class="hd-user-info">
+    <div class="hd-user-name" id="hd-display-name">{{ user.name if user else 'User' }}</div>
+    <div class="hd-user-handle" id="hd-display-handle">@{{ user.username if user and user.username else (user.email.split('@')[0] if user else 'user') }}</div>
+  </div>
+
+  <!-- Quick Focus / Edit Button -->
+  <button type="button" id="btn-edit-profile" class="hd-btn-edit-profile" title="Edit Profile Details">
+    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 4px; vertical-align: -1px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    <span>Edit Details</span>
+  </button>
+
+  <!-- Divider -->
+  <div class="hd-divider"></div>
+
+  <!-- ── Normal View (Email, Role, Delete Account) ────────────────────────── -->
+  <div id="hd-view-details" class="hd-view-section">
+    <div class="hd-field-group">
+      <label class="hd-field-label">Email</label>
+      <div class="hd-field-row">
+        <input
+          type="email"
+          id="hd-input-email"
+          class="hd-field-input hd-field-input--readonly"
+          value="{{ user.email if user else '' }}"
+          readonly
+          tabindex="-1"
+          title="Email is verified and cannot be edited"
+        >
+        <span class="hd-lock-badge" title="Verified & Locked">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="hd-field-group">
+      <label class="hd-field-label">Role</label>
+      <div class="hd-field-row hd-field-row--static">
+        <span class="hd-role-tag">{{ user.role if user and user.role else 'Member' }}</span>
+      </div>
+    </div>
+
+    <div class="hd-panel-actions">
+      <button type="button" id="btn-delete-account" class="hd-btn-delete">
+        Delete Account
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Edit View (Full Name, Username, Save, Cancel) ────────────────────── -->
+  <form id="hd-profile-form" class="hd-view-section hd-hidden" onsubmit="return false;">
+    <div class="hd-field-group">
+      <label for="hd-input-name" class="hd-field-label">Full Name</label>
+      <div class="hd-field-row">
+        <input
+          type="text"
+          id="hd-input-name"
+          class="hd-field-input"
+          value="{{ user.name if user else '' }}"
+          placeholder="Your full name"
+          required
+          maxlength="60"
+          autocomplete="name"
+        >
+      </div>
+    </div>
+
+    <div class="hd-field-group">
+      <label for="hd-input-username" class="hd-field-label">Username</label>
+      <div class="hd-field-row">
+        <div class="hd-input-prefix-wrap">
+          <span class="hd-input-prefix">@</span>
+          <input
+            type="text"
+            id="hd-input-username"
+            class="hd-field-input hd-input-has-prefix"
+            value="{{ user.username if user and user.username else (user.email.split('@')[0] if user else '') }}"
+            placeholder="username"
+            required
+            minlength="3"
+            maxlength="30"
+            autocomplete="username"
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Panel Actions -->
+    <div class="hd-panel-actions hd-panel-actions--edit">
+      <button type="submit" id="btn-save-profile" class="hd-btn-save">
+        <span class="hd-btn-text">Save Changes</span>
+        <span class="hd-spinner hd-hidden"></span>
+      </button>
+      <button type="button" id="btn-cancel-profile" class="hd-btn-cancel-edit">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- Notice (direct URL blocked) -->
+  {% if notice %}
+  <div class="hd-notice">
+    <span class="hd-notice-icon">🔒</span>
+    <span class="hd-notice-text">
+      {% if notice == 'direct_url_blocked_calculator' %}
+        Open Calculator via the launch card.
+      {% elif notice == 'direct_url_blocked_template' %}
+        Open Template via the launch card.
+      {% elif notice == 'direct_url_blocked_contact' %}
+        Open Contact via the launch card.
+      {% else %}
+        Direct URL access is restricted.
+      {% endif %}
+    </span>
+  </div>
+  {% endif %}
+
+</aside>

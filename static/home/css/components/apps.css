@@ -1,0 +1,222 @@
+/* ==========================================================================
+   AuthGuard — Home Apps Grid & Launcher Card Styling
+   ========================================================================== */
+
+/* ── Apps Panel ────────────────────────────────────────────────────────── */
+.hd-apps-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding-right: 2px;
+}
+
+/* ── Toolbar (Search & Sort) ───────────────────────────────────────────── */
+.hd-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hd-search-wrap {
+  position: relative;
+  flex: 1;
+}
+
+.hd-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.hd-search-input {
+  width: 100%;
+  padding: 0.52rem 0.75rem 0.52rem 2.25rem;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-md);
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  color: var(--text-body);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.hd-search-input::placeholder { color: var(--text-muted); }
+
+.hd-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-input-focus);
+}
+
+.hd-sort-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.hd-sort-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.hd-sort-select {
+  padding: 0.45rem 0.7rem;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-md);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--text-body);
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.hd-sort-select:focus { border-color: var(--color-primary); }
+
+/* ── App Grid ──────────────────────────────────────────────────────────── */
+.hd-apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.25rem;
+}
+
+/* ── App Card ──────────────────────────────────────────────────────────── */
+.hd-app-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-lg);
+  padding: 1.75rem 1.25rem 1.4rem;
+  min-height: 155px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+.hd-app-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px var(--color-primary-glow), var(--shadow-card);
+  transform: translateY(-3px);
+}
+
+/* Three-dot menu */
+.hd-app-card-menu {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s;
+  cursor: default;
+  pointer-events: none;
+}
+
+.hd-app-card:hover .hd-app-card-menu {
+  opacity: 0.7;
+}
+
+/* App Icons */
+.hd-app-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.hd-app-card:hover .hd-app-icon {
+  transform: scale(1.08);
+}
+
+.hd-app-icon--calc {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.hd-app-icon--template {
+  background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+}
+
+.hd-app-icon--contact {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.hd-app-icon--calendar {
+  background: linear-gradient(135deg, #6C63FF 0%, #4F46E5 100%);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
+}
+
+.hd-app-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  text-align: center;
+}
+
+/* Add New App Card */
+.hd-app-card--add {
+  border: 1.5px dashed var(--border-medium);
+  background: transparent;
+  box-shadow: none;
+  opacity: 0.65;
+  cursor: pointer;
+  transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.hd-app-card--add:hover {
+  opacity: 1;
+  border-color: var(--color-primary);
+  border-style: solid;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.hd-add-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: var(--r-md);
+  background: var(--bg-muted);
+  border: 1.5px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: color 0.2s, background 0.2s;
+}
+
+.hd-app-card--add:hover .hd-add-icon {
+  color: var(--color-primary);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.hd-add-label {
+  color: var(--text-muted);
+  font-size: 0.825rem;
+}

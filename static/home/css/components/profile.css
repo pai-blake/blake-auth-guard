@@ -1,0 +1,373 @@
+/* ==========================================================================
+   AuthGuard — Home Profile Panel & Field Styling
+   ========================================================================== */
+
+/* ── Profile Sidebar Panel ─────────────────────────────────────────────── */
+.hd-profile-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-card);
+  padding: 1.15rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.hd-panel-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  align-self: flex-start;
+  margin-bottom: 0.05rem;
+}
+
+/* ── Avatar & Upload Trigger ───────────────────────────────────────────── */
+.hd-avatar-wrap {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.hd-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--overlay-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+  cursor: pointer;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.hd-avatar:hover {
+  box-shadow: 0 6px 22px rgba(99, 102, 241, 0.45);
+  transform: scale(1.02);
+}
+
+.hd-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hd-avatar-initials {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.hd-avatar-hover-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.hd-avatar:hover .hd-avatar-hover-badge {
+  opacity: 1;
+}
+
+.hd-avatar-badge {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--color-success, #22c55e);
+  border: 2px solid var(--bg-card);
+  color: #fff;
+  font-size: 0.65rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+/* ── User Name & Handle ────────────────────────────────────────────────── */
+.hd-user-info {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.hd-user-name {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  line-height: 1.2;
+}
+
+.hd-user-handle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* ── Edit Profile Button ───────────────────────────────────────────────── */
+.hd-btn-edit-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.32rem 0.65rem;
+  border: 1.5px solid var(--border-medium);
+  color: var(--text-secondary);
+  border-radius: var(--r-md);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--bg-muted);
+  font-family: var(--font-sans);
+}
+
+.hd-btn-edit-profile:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+/* ── Divider ───────────────────────────────────────────────────────────── */
+.hd-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.15rem 0;
+}
+
+/* ── View Sections (Swapped on Edit Mode) ──────────────────────────────── */
+.hd-view-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: hd-fadein 0.2s ease-out;
+}
+
+.hd-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+}
+
+.hd-field-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hd-field-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+}
+
+.hd-field-row--static {
+  padding: 0.15rem 0;
+}
+
+.hd-field-input {
+  width: 100%;
+  padding: 0.4rem 0.65rem;
+  background: var(--bg-input, var(--bg-card));
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--r-md);
+  font-family: var(--font-sans);
+  font-size: 0.825rem;
+  color: var(--text-body);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.hd-field-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2.5px rgba(99, 102, 241, 0.15);
+}
+
+.hd-field-input--readonly {
+  background: var(--bg-muted);
+  color: var(--text-muted);
+  border-color: var(--border-light);
+  cursor: not-allowed;
+}
+
+.hd-field-input--readonly:focus {
+  border-color: var(--border-light);
+  box-shadow: none;
+}
+
+.hd-input-prefix-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.hd-input-prefix {
+  position: absolute;
+  left: 0.65rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.hd-field-input.hd-input-has-prefix {
+  padding-left: 1.45rem;
+}
+
+.hd-lock-badge {
+  position: absolute;
+  right: 0.6rem;
+  color: var(--text-muted);
+  opacity: 0.6;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.hd-role-tag {
+  display: inline-block;
+  padding: 0.18rem 0.55rem;
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--color-primary);
+  border-radius: var(--r-sm);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Panel Action Buttons ──────────────────────────────────────────────── */
+.hd-panel-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.hd-panel-actions--edit {
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.hd-btn-save {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.48rem 0.9rem;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 0.825rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-btn);
+}
+
+.hd-btn-save:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-btn-hover);
+  transform: translateY(-1px);
+}
+
+.hd-btn-save:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.hd-btn-cancel-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.42rem 0.9rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border-medium);
+  border-radius: var(--r-md);
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hd-btn-cancel-edit:hover {
+  background: var(--bg-muted);
+  border-color: var(--border-hover);
+  color: var(--text-headline);
+}
+
+.hd-btn-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.45rem 0.9rem;
+  background: transparent;
+  color: var(--color-error, #ef4444);
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--r-md);
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hd-btn-delete:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: #ef4444;
+}
+
+/* ── Notice Banner ─────────────────────────────────────────────────────── */
+.hd-notice {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  background: rgba(239, 68, 68, 0.07);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--r-md);
+  font-size: 0.75rem;
+  color: #ef4444;
+  line-height: 1.35;
+  box-sizing: border-box;
+}
+
+.hd-notice-icon { flex-shrink: 0; }

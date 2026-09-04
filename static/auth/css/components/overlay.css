@@ -1,0 +1,147 @@
+/* ==========================================================================
+   AuthGuard — Overlay Curtain & Side Panels
+   ========================================================================== */
+
+.auth-overlay {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  background: var(--overlay-bg);
+  color: #fff;
+  z-index: 10;
+  overflow: hidden;
+  transition: left 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-card.curtain-expand .auth-overlay {
+  left: 0 !important;
+  width: 100% !important;
+}
+
+.auth-card.mode-signup .auth-overlay { left: 0; width: 50%; }
+.auth-card.mode-login  .auth-overlay { left: 50%; width: 50%; }
+
+/* Mode-Full / mode-one (Overlay Removed) */
+.auth-card.mode-full .auth-overlay,
+.auth-card.mode-one .auth-overlay { 
+  display: none !important; 
+}
+
+.auth-card.mode-full .signin-signup {
+  width: 100% !important;
+  left: 0 !important;
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Custom Program Mode (Chat / App fills entire card width and height) */
+.auth-card.mode-one .signin-signup {
+  width: 100% !important;
+  max-width: 100% !important;
+  left: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100% !important;
+  position: relative;
+}
+
+/* Overlay Content Panels */
+.overlay-panel {
+  position: absolute;
+  inset: 0;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: opacity 0.25s ease;
+}
+
+.overlay-right { opacity: 1; pointer-events: auto; }
+.overlay-left  { opacity: 0; pointer-events: none; }
+
+.auth-card.mode-signup .overlay-right { opacity: 0; pointer-events: none; }
+.auth-card.mode-signup .overlay-left  { opacity: 1; pointer-events: auto; }
+
+.overlay-graphic { margin-bottom: 1rem; }
+
+.graphic-badge {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin: 0 auto;
+}
+
+.graphic-badge svg { width: 28px; height: 28px; }
+
+.overlay-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.4rem;
+}
+
+.overlay-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.6rem;
+}
+
+.overlay-desc {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.85);
+  max-width: 260px;
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+.btn-overlay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.75rem;
+  border-radius: var(--r-full);
+  border: 2px solid rgba(255,255,255,0.7);
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: all 0.22s ease;
+}
+
+.btn-overlay:hover {
+  background: #fff;
+  color: var(--brand-600);
+  border-color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+.overlay-subtext {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  margin-top: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+  .auth-overlay { display: none; }
+}

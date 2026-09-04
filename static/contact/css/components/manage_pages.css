@@ -1,0 +1,197 @@
+/* ==========================================================================
+   AuthGuard — Contact Module Manage Pages Form & Category List CSS
+   ========================================================================== */
+
+/* ── Edit / Page Manager View Styles ─────────────────────────────────────── */
+.ct-limit-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--color-primary);
+  border: 1px solid rgba(99, 102, 241, 0.18);
+}
+
+.ct-create-page-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 16px;
+  padding: 1.25rem 1.35rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  flex-shrink: 0;
+}
+
+.ct-card-header-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.ct-card-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: var(--text-title);
+  margin: 0;
+}
+
+.ct-pill-info {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: rgba(99, 102, 241, 0.08);
+  padding: 0.1rem 0.45rem;
+  border-radius: 6px;
+}
+
+.ct-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0 0 0.95rem;
+}
+
+.ct-create-page-form .ct-form-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.ct-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.ct-flex-grow {
+  flex: 1;
+}
+
+.ct-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary, #64748b);
+}
+
+.ct-limit-notice {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f59e0b;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ct-pages-manager-wrap {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.ct-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.65rem;
+}
+
+.ct-pages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ct-page-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  gap: 1rem;
+  transition: border-color 0.18s ease;
+}
+
+.ct-page-item:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.ct-page-item-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.ct-page-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.ct-page-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.ct-page-item-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-title);
+  letter-spacing: -0.01em;
+}
+
+.ct-page-item-route {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono, monospace);
+}
+
+.ct-tag-system {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: var(--bg-page);
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+}
+
+.ct-page-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ct-input-rename {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-input, var(--bg-page));
+  color: var(--text-body);
+  outline: none;
+  width: 140px;
+  transition: border-color 0.2s;
+}
+
+.ct-input-rename:focus {
+  border-color: var(--color-primary);
+  background: var(--bg-card);
+}

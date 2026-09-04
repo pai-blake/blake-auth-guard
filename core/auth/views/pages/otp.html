@@ -1,0 +1,47 @@
+<div class="auth-view" id="view-otp">
+  <div class="view-header">
+    <button type="button" class="back-btn" id="btn-back-from-otp">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back / Change Email
+    </button>
+    <h1 class="view-title" id="otp-title">Check your email</h1>
+    <p class="view-subtitle">We sent a 6-digit code to</p>
+    <div class="email-pill">
+      <span id="otp-target-display">user@example.com</span>
+      <button type="button" class="pill-edit" id="btn-edit-target-email" title="Change email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <form id="form-otp" novalidate>
+    <div class="otp-inputs" id="otp-inputs-wrapper">
+      <input type="text" class="otp-digit" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-index="0" autocomplete="one-time-code" aria-label="Digit 1" autofocus>
+      <input type="text" class="otp-digit" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-index="1" aria-label="Digit 2">
+      <input type="text" class="otp-digit" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-index="2" aria-label="Digit 3">
+      <span class="otp-dash">—</span>
+      <input type="text" class="otp-digit" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-index="3" aria-label="Digit 4">
+      <input type="text" class="otp-digit" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-index="4" aria-label="Digit 5">
+      <input type="text" class="otp-digit" inputmode="numeric" pattern="[0-9]*" maxlength="1" data-index="5" aria-label="Digit 6">
+    </div>
+    <span class="field-error otp-error" id="error-otp-code"></span>
+
+    <div class="otp-meta">
+      <div class="otp-timer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Expires in <strong id="otp-timer-text">05:00</strong></span>
+      </div>
+      <div class="otp-resend">
+        <span id="resend-cooldown-text" class="cooldown-text">Resend in <strong id="resend-countdown-seconds">30</strong>s</span>
+        <button type="button" id="btn-resend-otp" class="resend-btn hidden">Resend code</button>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary" id="btn-submit-otp">
+      <span class="btn-text">Verify &amp; Continue</span>
+      <div class="btn-spinner hidden"></div>
+    </button>
+
+    <p class="otp-hint">Please check your inbox (including Spam folder) for your OTP.</p>
+  </form>
+</div>

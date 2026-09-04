@@ -1,0 +1,111 @@
+<!-- ───────────────────────────────────────────────────────────────────
+     VIEW 4: EDIT / MANAGE PAGES
+     ─────────────────────────────────────────────────────────────────── -->
+<section class="ct-view" id="ct-view-edit" role="tabpanel" aria-labelledby="tab-edit">
+  <header class="ct-view-header">
+    <div>
+      <h2 class="ct-view-heading">Manage Pages</h2>
+      <p class="ct-view-subheading">Custom categories (Max 3 extra, 6 total)</p>
+    </div>
+    <div class="ct-limit-badge" id="ct-limit-badge">
+      <span id="ct-badge-count-text">3 / 6 Pages</span>
+    </div>
+  </header>
+
+  <!-- Create New Page Form -->
+  <div class="ct-create-page-card" id="ct-create-page-card">
+    <div class="ct-card-header-mini">
+      <h3 class="ct-card-title">New Category</h3>
+      <span class="ct-pill-info">Custom Page</span>
+    </div>
+    <p class="ct-card-desc">Add a custom page tab to organize contacts.</p>
+    <form id="ct-create-page-form" class="ct-create-page-form">
+      <div class="ct-form-row">
+        <div class="ct-form-group ct-flex-grow">
+          <label for="ct-new-page-name" class="ct-label">Title</label>
+          <input type="text" id="ct-new-page-name" class="ct-input" placeholder="e.g. Work, Family..." maxlength="24" required>
+        </div>
+        <div class="ct-form-group">
+          <label for="ct-new-page-icon" class="ct-label">Icon</label>
+          <select id="ct-new-page-icon" class="ct-select">
+            <option value="folder">📁 Folder</option>
+            <option value="briefcase">💼 Work</option>
+            <option value="home">🏠 Home</option>
+            <option value="rocket">🚀 Project</option>
+            <option value="target">🎯 Team</option>
+            <option value="bookmark">📌 Pinned</option>
+            <option value="globe">🌐 Network</option>
+            <option value="diamond">💎 VIP</option>
+          </select>
+        </div>
+        <div class="ct-form-group ct-form-group--submit">
+          <label class="ct-label">&nbsp;</label>
+          <button type="submit" class="ct-btn ct-btn--primary" id="btn-create-page">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Add Page</span>
+          </button>
+        </div>
+      </div>
+      <div class="ct-limit-notice" id="ct-limit-notice" style="display: none;">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span>Maximum limit reached (6 pages total).</span>
+      </div>
+    </form>
+  </div>
+
+  <!-- Page List Table / Cards -->
+  <div class="ct-pages-manager-wrap">
+    <h3 class="ct-section-title">Active Pages</h3>
+    <div class="ct-pages-list" id="ct-pages-list">
+      <!-- System Default Pages (Protected) -->
+      <div class="ct-page-item ct-page-item--locked">
+        <div class="ct-page-item-info">
+          <div class="ct-page-icon-badge">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+          <div class="ct-page-meta">
+            <span class="ct-page-item-name">Search</span>
+            <span class="ct-page-item-route">#/search</span>
+          </div>
+        </div>
+        <span class="ct-tag-system">Default</span>
+      </div>
+
+      <div class="ct-page-item ct-page-item--locked">
+        <div class="ct-page-item-info">
+          <div class="ct-page-icon-badge">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          </div>
+          <div class="ct-page-meta">
+            <span class="ct-page-item-name">All Contacts</span>
+            <span class="ct-page-item-route">#/all</span>
+          </div>
+        </div>
+        <span class="ct-tag-system">Default</span>
+      </div>
+
+      <div class="ct-page-item ct-page-item--locked">
+        <div class="ct-page-item-info">
+          <div class="ct-page-icon-badge">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div class="ct-page-meta">
+            <span class="ct-page-item-name">Favourites</span>
+            <span class="ct-page-item-route">#/favourite</span>
+          </div>
+        </div>
+        <span class="ct-tag-system">Default</span>
+      </div>
+
+      <!-- Dynamic custom pages inserted here -->
+      <div id="ct-custom-pages-list-container"></div>
+    </div>
+  </div>
+</section>

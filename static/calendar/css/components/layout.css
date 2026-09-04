@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Calendar Module — Layout & Responsive Container (Clean Fit, Zero Header Overlap)
+   ========================================================================== */
+
+/* Full viewport fit matching Contact module standard */
+html, body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.calendar-main-container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  /* Top padding ensures zero overlap with the 64px absolute app-header */
+  padding: 4.75rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  height: 100vh;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.calendar-workspace {
+  display: grid;
+  grid-template-columns: 235px 1fr;
+  gap: 0.85rem;
+  align-items: stretch;
+  width: 100%;
+  flex: 1;
+  min-height: 0; /* Prevents overflow from busting flex container */
+  height: calc(100vh - 8.8rem);
+  overflow: hidden;
+}
+
+.calendar-views-container {
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.04);
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="dark"] .calendar-views-container {
+  background: var(--bg-surface, #131722);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+}
+
+.calendar-view {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.calendar-view.active {
+  display: flex;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1080px) {
+  .calendar-workspace {
+    grid-template-columns: 210px 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .calendar-workspace {
+    grid-template-columns: 1fr;
+  }
+  .calendar-sidebar {
+    display: none;
+  }
+}

@@ -1,0 +1,28 @@
+<div class="auth-view" id="view-forgot">
+  <div class="view-header">
+    <button type="button" class="back-btn" id="btn-back-from-forgot">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to sign in
+    </button>
+    <h1 class="view-title">Reset password</h1>
+    <p class="view-subtitle">Enter your email address to receive a 6-digit reset code</p>
+  </div>
+
+  <form id="form-forgot" novalidate>
+    <div class="form-group">
+      <label for="forgot-email">Email address</label>
+      <div class="input-wrapper">
+        <span class="input-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <input type="email" id="forgot-email" placeholder="you@company.com" required autocomplete="email">
+      </div>
+      <span class="field-error" id="error-forgot-email"></span>
+    </div>
+
+    <button type="submit" class="btn-primary" id="btn-submit-forgot">
+      <span class="btn-text">Send reset OTP</span>
+      <div class="btn-spinner hidden"></div>
+    </button>
+  </form>
+</div>

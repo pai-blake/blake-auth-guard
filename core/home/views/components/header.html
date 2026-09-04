@@ -1,0 +1,11 @@
+{# Home Module Header — reuses the flexible general header #}
+{% with 
+    brand_prefix="Auth",
+    brand_suffix="Guard",
+    brand_icon="shield",
+    show_back=False,
+    show_logout=True,
+    show_theme_toggle=True
+%}
+  {% include "general/views/components/header.html" %}
+{% endwith %}

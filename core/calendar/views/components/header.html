@@ -1,0 +1,12 @@
+{# Calendar Module Header — reuses the flexible general header with module branding #}
+{% with 
+    brand_prefix="Calendar",
+    brand_suffix="Pro",
+    brand_icon="calendar",
+    show_back=True,
+    back_url="/home",
+    show_logout=True,
+    show_theme_toggle=True
+%}
+  {% include "general/views/components/header.html" %}
+{% endwith %}

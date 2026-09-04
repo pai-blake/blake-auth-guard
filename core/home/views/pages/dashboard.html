@@ -1,0 +1,12 @@
+<!-- Home Dashboard — Two-Panel Layout -->
+<div class="hd-layout" id="home-dashboard">
+  <!-- Left Panel: Profile -->
+  {% include "home/views/components/profile.html" %}
+
+  <!-- Right Panel: Modules Grid -->
+  {% include "home/views/components/apps.html" %}
+</div>
+
+<!-- Confirmation & Safety Modals -->
+{% include "home/views/components/delete_modal.html" %}
+{% include "home/views/components/unsaved_modal.html" %}

@@ -1,0 +1,108 @@
+/* ==========================================================================
+   AuthGuard — Card & Viewport Framework
+   ========================================================================== */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-page);
+  position: relative;
+}
+
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 1.25rem 4.5rem;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 1040px;
+  height: calc(100vh - 4rem);
+  max-height: 720px;
+  min-height: 560px;
+  background: var(--bg-card);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-card-lg);
+  overflow: hidden;
+  display: flex;
+  transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom Program / Full-Width Workspace Expansion */
+.auth-card.mode-one {
+  max-width: 1280px;
+  height: calc(100vh - 4rem);
+  max-height: 840px;
+}
+
+/* Forms Container */
+.forms-container {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.signin-signup {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem 2.75rem;
+  z-index: 2;
+  transition: left 0.38s cubic-bezier(0.4, 0, 0.2, 1),
+              width 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.signin-signup::-webkit-scrollbar { display: none; }
+
+.auth-card.mode-signup .signin-signup { left: 50%; }
+
+/* Responsive view overrides */
+@media (max-width: 768px) {
+  html, body {
+    overflow-y: auto;
+  }
+
+  .main-container {
+    padding: 1rem;
+    height: auto;
+  }
+
+  .auth-card {
+    max-width: 440px;
+    height: auto;
+    max-height: none;
+  }
+
+  .signin-signup {
+    position: relative;
+    width: 100% !important;
+    left: 0 !important;
+    padding: 2rem 1.5rem;
+  }
+}

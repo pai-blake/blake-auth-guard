@@ -1,0 +1,19 @@
+/* ==========================================================================
+   AuthGuard — Contact Core Module Stylesheet
+   Component-based Architecture & Theme Integration
+   ========================================================================== */
+
+/* 1. Layout & Responsive Structure */
+@import url("components/layout.css");
+
+/* 2. Navigation, Brand & Sidebar Tabs */
+@import url("components/nav.css");
+
+/* 3. Cards Grid, Search Inputs, Action Buttons */
+@import url("components/cards.css");
+
+/* 4. Manage Pages & Category List */
+@import url("components/manage_pages.css");
+
+/* 5. Modals & Profile Detail Popup Dialog */
+@import url("components/modals.css");

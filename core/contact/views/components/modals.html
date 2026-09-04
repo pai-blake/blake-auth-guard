@@ -1,0 +1,55 @@
+<!-- =====================================================================
+     MODAL 1: Pick Contacts to Add to Favourite
+     ===================================================================== -->
+<div class="ct-modal-backdrop" id="modal-add-favourite" style="display: none;" aria-hidden="true">
+  <div class="ct-modal" role="dialog" aria-labelledby="modal-fav-title">
+    <header class="ct-modal-header">
+      <div class="ct-modal-header-text">
+        <h3 class="ct-modal-title" id="modal-fav-title">Add to Favourites</h3>
+        <p class="ct-modal-subtitle">Pick from saved contacts</p>
+      </div>
+      <button type="button" class="ct-btn-close" id="btn-close-fav-modal" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
+    <div class="ct-modal-body">
+      <div class="ct-modal-search">
+        <input type="text" id="modal-fav-filter-input" class="ct-input ct-input--sm" placeholder="Filter contacts...">
+      </div>
+      <div class="ct-modal-list" id="modal-fav-contacts-list">
+        <!-- Dynamically populated contacts picker -->
+      </div>
+    </div>
+    <footer class="ct-modal-footer">
+      <button type="button" class="ct-btn ct-btn--secondary" id="btn-cancel-fav-modal">Done</button>
+    </footer>
+  </div>
+</div>
+
+<!-- =====================================================================
+     MODAL 2: Contact Detail Profile Popup Box
+     ===================================================================== -->
+<div class="ct-modal-backdrop" id="modal-contact-detail" style="display: none;" aria-hidden="true">
+  <div class="ct-modal ct-modal--detail" role="dialog" aria-labelledby="modal-detail-name">
+    <header class="ct-modal-header">
+      <div class="ct-modal-header-text">
+        <span class="ct-pill-info">Contact Profile</span>
+      </div>
+      <button type="button" class="ct-btn-close" id="btn-close-detail-modal" aria-label="Close modal">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </header>
+    <div class="ct-modal-body ct-detail-body" id="modal-detail-body">
+      <!-- Dynamically populated detail -->
+    </div>
+    <footer class="ct-modal-footer ct-detail-footer" id="modal-detail-footer">
+      <!-- Dynamically populated actions -->
+    </footer>
+  </div>
+</div>

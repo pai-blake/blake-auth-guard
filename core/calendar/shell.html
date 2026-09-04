@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuthGuard — Calendar</title>
+  <meta name="description"
+    content="Next-Gen Schedule & Event Planning Calendar Module for AuthGuard.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  
+  <!-- Brand Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='general/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='general/favicon.svg') }}">
+
+  <!-- Design Tokens & CSS Variables -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='general/css/components/variables.css') }}?v=2026090502">
+
+  <!-- General Module CSS Master -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='general/css/style.css') }}?v=2026090502">
+  
+  <!-- Calendar Module CSS Master -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='calendar/css/style.css') }}?v=2026090502">
+</head>
+
+<body>
+
+  <!-- Calendar Top Bar / Global Header -->
+  {% include "calendar/views/components/header.html" %}
+
+  <!-- Main Container -->
+  <main class="calendar-main-container">
+    {% include "calendar/views/pages/calendar.html" %}
+  </main>
+
+  <!-- Modals & Popups -->
+  {% include "calendar/views/components/modals.html" %}
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- 1. General / System-Wide Utilities -->
+  <script src="{{ url_for('static', filename='general/js/loader.js') }}?v=2026090502"></script>
+  <script src="{{ url_for('static', filename='general/js/storage.js') }}?v=2026090502"></script>
+  <script src="{{ url_for('static', filename='general/js/theme.js') }}?v=2026090502"></script>
+  <script src="{{ url_for('static', filename='general/js/toast.js') }}?v=2026090502"></script>
+
+  <!-- Server-provided boot state -->
+  <script>
+    window.__SERVER_ROUTE__ = {{ server_route | default('/calendar') | tojson }};
+    window.__SERVER_USER__  = {{ server_user  | default(None) | tojson }};
+    window.__USER_SESSION__ = {{ user_session | default(False) | tojson }};
+    window.__USER_PERMISSIONS__ = {{ user_permissions | default([]) | tojson }};
+
+    window.hasPermission = function (perm) {
+      if (!perm) return true;
+      var currentUser = (window.DB && window.DB.getCurrentUser()) || (window.__USER_SESSION__ ? window.__SERVER_USER__ : null);
+      if (!currentUser) return false;
+      if (perm === 'body' || perm === 'home') return true;
+      var perms = window.__USER_PERMISSIONS__ || (currentUser && currentUser.permissions) || [];
+      return Array.isArray(perms) && perms.includes(perm);
+    };
+
+    if (window.__SERVER_USER__ && window.DB && !window.DB.getCurrentUser()) {
+      window.DB.setCurrentUser(window.__SERVER_USER__);
+    }
+
+    document.addEventListener('click', function (event) {
+      var btn = event.target.closest('#btn-header-logout, #btn-logout');
+      if (btn && window.__USER_SESSION__) {
+        try { navigator.sendBeacon('{{ url_for("router.logout") }}'); } catch (e) {}
+      }
+    }, true);
+  </script>
+
+  <!-- 2. Calendar Module — Backbone Scripts (Load Order Matters) -->
+  <!--    ┌─ Core State, API Client & Event Bus → CalendarCore  -->
+  <script src="{{ url_for('static', filename='calendar/js/components/core.js') }}?v=2026090502"></script>
+  <!--    ├─ UI Renderers & Dom Builders        → CalendarUI    -->
+  <script src="{{ url_for('static', filename='calendar/js/components/ui.js') }}?v=2026090502"></script>
+  <!--    ├─ In-Page View Router & Navigation   → CalendarRouter -->
+  <script src="{{ url_for('static', filename='calendar/js/components/router.js') }}?v=2026090502"></script>
+  <!--    ├─ Page-Level Handlers & Modals       → CalendarMainPage -->
+  <script src="{{ url_for('static', filename='calendar/js/pages/main.js') }}?v=2026090502"></script>
+  <!--    └─ Application Bootstrap               → CalendarApp   -->
+  <script src="{{ url_for('static', filename='calendar/js/components/app.js') }}?v=2026090502"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,263 @@
+AUTHGUARD — ARCHITECTURE AND CODEBASE EXPLANATION
+=====================================================
+Last Updated: 2026-09-05
+
+
+1. OVERVIEW AND ARCHITECTURAL DESIGN
+-------------------------------------
+AuthGuard is built on an enterprise-grade 6-Tier Architecture:
+
+  SERVER → APP → ROUTES → CONTROLLERS → SERVICES → DATABASE
+
+Each tier has a single, strictly defined responsibility. The project is
+further divided into DOMAIN CORES, each representing a self-contained
+feature module with its own routes, controllers, views, and static assets.
+
+DOMAIN CORES:
+  - GENERAL  : System-wide facilities — health checks, rate limiting, email.
+  - AUTH     : Full user identity lifecycle — login, signup, OTP, OAuth, recovery.
+  - HOME     : Protected dashboard — user profile, app launcher, theme control.
+  - CALCULATOR: Standalone computation module — basic, scientific, advanced modes.
+  - TEMPLATE : Developer backbone — a ready-to-clone scaffold for new cores.
+
+Each core follows the same structural pattern, making the codebase predictable
+and easy to extend. See new_core_guide.txt for a step-by-step guide to adding
+a new core.
+
+
+2. THE 6 ARCHITECTURAL TIERS EXPLAINED
+---------------------------------------
+
+TIER 1 — SERVER  (server.py)
+  What it is:  Main execution entry point.
+  Why we need: Decouples server process management from the Flask app definition,
+               allowing the app to run under Gunicorn, uWSGI, or pytest without
+               changing the application logic.
+  What it does:
+    • Scans for an open network port via find_available_port().
+    • Initializes background services (SMTP email transporters).
+    • Binds the Flask app with app.run() when invoked directly.
+
+TIER 2 — APP  (app.py)
+  What it is:  Flask application factory and configuration layer.
+  Why we need: Isolates the Flask instance, Jinja loaders, middleware, and
+               security policies from startup loops.
+  What it does:
+    • Configures multi-directory Jinja ChoiceLoader (all core view folders).
+    • Sets session cookies, secret keys, and max payload size limits.
+    • Injects global security headers on every response (X-Content-Type-Options,
+      X-Frame-Options, Referrer-Policy).
+    • Registers router_bp (HTML page views) and api_bp (JSON endpoints).
+
+TIER 3 — ROUTES  (routes/)
+  What it is:  URL and HTTP method routing registry.
+  Why we need: Maps incoming requests to controller functions without mixing
+               in validation or business logic.
+  Structure:
+    routes/__init__.py         → Aggregates all blueprints into router_bp & api_bp.
+    routes/general/            → /, /logout, /api/status, /api/routes
+    routes/auth/               → /auth, /api/auth/login, /api/send-otp,
+                                 /api/verify-otp, /api/config/*, OAuth callbacks
+    routes/home/               → /home, /body, /api/home/*, launch endpoints
+    routes/calculator/         → /calculator
+    routes/template/           → /template
+
+TIER 4 — CONTROLLERS  (controllers/)
+  What it is:  HTTP request/response handler layer.
+  Why we need: Acts as the bridge between web protocol details (HTTP methods,
+               JSON payloads, query params, cookies, status codes) and pure
+               business logic in services.
+  What it does:
+    • Reads and sanitizes request parameters from flask.request.
+    • Validates basic payload structure.
+    • Calls the corresponding Service to perform business actions.
+    • Translates service results into HTTP responses (JSON, redirects, or
+      template renders).
+  Structure:
+    controllers/general/       → system_controller.py, page_controller.py
+    controllers/auth/          → auth_controller.py, otp_controller.py,
+                                 social_controller.py, page_controller.py
+    controllers/home/          → home_controller.py, page_controller.py
+    controllers/calculator/    → page_controller.py
+    controllers/template/      → page_controller.py
+
+TIER 5 — SERVICES  (services/)
+  What it is:  Core business logic and external integration layer.
+  Why we need: Keeps business rules completely independent of HTTP mechanics.
+               This layer is purely algorithmic and testable in isolation.
+  Structure:
+    services/general/helper_service.py   → Sliding-window rate limiters,
+                                           CSPRNG OTP generation, session token
+                                           signing, timing-safe comparisons.
+    services/general/email_service.py    → Transactional emails via SMTP.
+    services/general/system_service.py   → JWT-like session token validation,
+                                           system health inspection.
+    services/general/permission_service.py → Route-level permission guards,
+                                           session-based launch tokens,
+                                           @permission_required decorator.
+    services/auth/auth_service.py        → PBKDF2 password verification,
+                                           credential authentication, session
+                                           token issuance.
+    services/auth/otp_service.py         → OTP generation, 15-second debounce,
+                                           5-attempt limits, account provisioning.
+    services/auth/social_service.py      → OAuth code exchange (Discord, GitHub,
+                                           Google), profile fetch, user upsert.
+    services/auth/password_service.py    → Password strength validation, hashing,
+                                           database record updates.
+    services/home/home_service.py        → Active session validation for protected
+                                           views, account deletion token handling,
+                                           profile update operations.
+
+TIER 6 — DATABASE  (database/ & config/db.py)
+  What it is:  Data persistence and query execution layer.
+  Why we need: Isolates SQL queries, connection pooling, schema creation,
+               and failover mechanics from business logic.
+  What it does:
+    • Connects to PostgreSQL if DATABASE_URL or PG_* env vars are set.
+    • Automatically falls back to SQLite (database/authguard.db).
+    • Provides CRUD helpers: db_get_user, db_create_user, db_update_user_*,
+      db_save_otp, db_get_otp, db_delete_otp, db_delete_account, deletion
+      token management, and avatar URL storage.
+
+
+3. CORE MODULE STRUCTURE
+--------------------------
+Each domain core follows a consistent dual-location structure:
+
+  core/<name>/                   ← Server-side (Python + Jinja2 HTML)
+    __init__.py                  ← Python package (empty or Blueprint setup)
+    shell.html                   ← Master page shell (loads CSS, JS, injects vars)
+    views/
+      components/
+        header.html              ← Module header (reuses or customizes general header)
+      pages/
+        <name>.html              ← Main page content (included by shell.html)
+
+  static/<name>/                 ← Client-side (CSS + JavaScript)
+    css/
+      style.css                  ← CSS master importer (imports all components)
+      components/
+        layout.css               ← Full-page layout (flex/grid, no-scroll framework)
+        <component>.css          ← Feature-specific styles
+    js/
+      components/
+        core.js                  ← State management & event bus  → window.<Name>Core
+        ui.js                    ← DOM helpers & view switcher   → window.<Name>UI
+        router.js                ← In-page hash routing          → window.<Name>Router
+        app.js                   ← Bootstrap entry point         → window.<Name>App
+      pages/
+        main.js                  ← Page-level logic & route registration
+
+  routes/<name>/                 ← URL registration
+    __init__.py
+    page_routes.py
+
+  controllers/<name>/            ← HTTP handler
+    __init__.py
+    page_controller.py
+
+The `template` core is a fully-wired, working example of this pattern. Clone
+it when creating a new core. See new_core_guide.txt for detailed steps.
+
+
+4. PERMISSION AND ENTRY GUARD SYSTEM
+--------------------------------------
+Access to each core module is enforced at two levels:
+
+SERVER-SIDE (services/general/permission_service.py):
+  • @permission_required('module_name') decorator wraps every page controller.
+  • If the user is not authenticated: redirect to /auth.
+  • Module-specific session launch tokens (e.g. session['calculator_access'])
+    enforce that users enter via the Home dashboard button, not by typing a URL
+    directly. Visiting /home resets all active module tokens.
+
+CLIENT-SIDE (each module's shell.html):
+  • window.hasPermission(perm) checks permissions injected server-side.
+  • window.__SERVER_USER__, window.__USER_PERMISSIONS__, window.__USER_SESSION__
+    are injected into every shell as inline <script> variables.
+  • The router.js of each module respects these permissions before navigating.
+
+
+5. GLOBAL CLIENT-SIDE UTILITIES
+----------------------------------
+Loaded by every module shell via static/general/js/:
+
+  loader.js      → Page loading state management (window.Loader)
+  storage.js     → Client-side user state (window.DB — getCurrentUser, setCurrentUser)
+  theme.js       → Dark/light theme manager (window.ThemeManager)
+  toast.js       → Toast notification system (window.showToast(msg, type, duration))
+
+CSS foundations loaded via static/general/css/:
+  components/variables.css → All CSS custom properties (colors, spacing, fonts, shadows)
+  components/reset.css     → Global reset: height: 100vh, overflow: hidden, box-sizing
+  components/header.css    → Shared horizontal header (used by home, calculator, template)
+  components/toast.css     → Toast notification styles
+
+
+6. SUPPORTING DIRECTORIES AND FILES
+--------------------------------------
+
+  config/
+    db.py           → DB engine, connection pool, schema migration, PBKDF2 hashing.
+    email_config.py → SMTP connection, credentials, email delivery via smtplib.
+
+  emails/
+    otp.py          → HTML + plain-text OTP verification email templates.
+    account.py      → HTML + plain-text account deletion confirmation templates.
+
+  .env              → Port, secret keys, DB credentials, SMTP credentials, OAuth IDs.
+  requirements.txt  → Python dependencies (Flask, python-dotenv, psycopg2-binary, etc.)
+
+
+7. END-TO-END REQUEST FLOWS
+-----------------------------
+
+FLOW A — USER LOGS IN (Email + Password)
+  1. Browser submits POST /api/auth/login { email, password }
+  2. routes/auth/api_routes.py → controllers/auth/auth_controller.login()
+  3. auth_controller sanitizes input, calls services/auth/auth_service.authenticate_user()
+  4. auth_service fetches user via db_get_user(), verifies PBKDF2 hash
+  5. On success: issues signed session token, updates Flask session
+  6. Returns JSON 200 → browser stores token, navigates to /home
+
+FLOW B — USER SIGNS UP (Email OTP)
+  1. Browser submits POST /api/send-otp { email, name, password, purpose: 'signup' }
+  2. otp_controller → otp_service.dispatch_otp()
+  3. otp_service checks rate limits, checks email uniqueness via db_get_user()
+  4. Generates 6-digit CSPRNG code, hashes pending password, saves via db_save_otp()
+  5. Sends verification email via email_service.send_otp_email()
+  6. Browser prompts user to enter the code → POST /api/verify-otp
+  7. otp_service validates code (timing-safe), calls db_create_user(), issues session
+
+FLOW C — USER OPENS A CORE MODULE (e.g. Calculator)
+  1. User clicks "Open Calculator" button in /home
+  2. Browser POSTs to /home/launch/calculator
+  3. home_controller.launch_calculator() sets session['calculator_access'] = True
+  4. Redirects to /calculator
+  5. @permission_required('calculator') checks session token → grants access
+  6. Renders core/calculator/shell.html with server user state injected
+  7. Client JS backbone (core.js → ui.js → router.js → main.js → app.js) boots
+
+FLOW D — CLIENT-SIDE TAB NAVIGATION (In-Page Routing)
+  1. User clicks a nav button with data-route="/docs"
+  2. TemplateRouter intercepts click via document event delegation
+  3. Router normalizes the path, checks permissions via window.hasPermission()
+  4. Calls TemplateUI.switchView(targetEl) to hide/show view sections
+  5. Updates window.location.hash → browser history entry added
+  6. Fires onEnter() lifecycle hook registered in main.js
+
+
+8. SUMMARY OF DESIGN BENEFITS
+--------------------------------
+  Maintainability  : Each file has one clear purpose. Business logic changes
+                     never touch routes or database code.
+  Testability      : Services and controllers are testable in isolation without
+                     a live server.
+  Security         : Protection at multiple tiers — rate limiting, timing-safe
+                     equality, PBKDF2 hashing, session launch tokens, HTTP
+                     security headers, and server-side permission decorators.
+  Extensibility    : Adding a new core only requires following the template
+                     pattern. The system is designed so that cloning `template`
+                     and doing a find-replace gives a working starting point.
+  Zero-Scroll UI   : All module pages are locked to 100vh with no outer scroll.
+                     Internal panels use flex/grid layouts to distribute space.

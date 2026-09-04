@@ -1,0 +1,579 @@
+AUTHGUARD — NEW CORE MODULE GUIDE
+====================================
+How to add a fully-wired new core module from scratch.
+Use `core/template` as the working reference implementation.
+
+Last Updated: 2026-09-05
+
+
+OVERVIEW
+---------
+A "core" in AuthGuard is a self-contained feature module with its own:
+  • Server-side HTML views    (core/<name>/)
+  • Client-side CSS + JS      (static/<name>/)
+  • Routes                    (routes/<name>/)
+  • Controller                (controllers/<name>/)
+  • Optional: Services        (services/<name>/)  ← only if backend logic needed
+
+The full file tree you will create for a module named "mymodule" is:
+
+  core/mymodule/
+    __init__.py
+    shell.html
+    views/
+      components/
+        header.html
+      pages/
+        mymodule.html
+
+  static/mymodule/
+    css/
+      style.css
+      components/
+        layout.css
+        card.css               ← rename/add as needed
+    js/
+      components/
+        core.js                → window.MymoduleCore
+        ui.js                  → window.MymoduleUI
+        router.js              → window.MymoduleRouter
+        app.js                 → window.MymoduleApp
+      pages/
+        main.js                → window.MymoduleMainPage
+
+  routes/mymodule/
+    __init__.py
+    page_routes.py
+
+  controllers/mymodule/
+    __init__.py
+    page_controller.py
+
+
+=====================================================================
+STEP 1 — COPY THE TEMPLATE CORE
+=====================================================================
+
+The easiest start is to copy the entire template module and rename it.
+
+  Source:      core/template/     static/template/
+               routes/template/   controllers/template/
+
+After copying, do a case-sensitive find-and-replace across all copied files:
+  "template"   →  "mymodule"
+  "Template"   →  "Mymodule"
+  "TEMPLATE"   →  "MYMODULE"
+  "tpl-"       →  "mm-"   (or any prefix you choose for CSS classes)
+  "tpl_"       →  "mm_"
+  "Tpl"        →  "Mm"
+
+Then follow the steps below to wire it into the system.
+
+
+=====================================================================
+STEP 2 — CREATE core/mymodule/__init__.py
+=====================================================================
+
+This is just a Python package marker. Leave it as:
+
+  """
+  core/mymodule/__init__.py
+  Mymodule core package.
+  """
+
+
+=====================================================================
+STEP 3 — CREATE core/mymodule/shell.html
+=====================================================================
+
+The shell is the master HTML page. Copy from core/template/shell.html and:
+
+  1. Update the <title> tag:
+       <title>AuthGuard — Mymodule</title>
+
+  2. Update the CSS import:
+       href="{{ url_for('static', filename='mymodule/css/style.css') }}"
+
+  3. Update the header include:
+       {% include "mymodule/views/components/header.html" %}
+
+  4. Update the page include:
+       {% include "mymodule/views/pages/mymodule.html" %}
+
+  5. Update the boot state script:
+       window.__SERVER_ROUTE__ = {{ server_route | default('/mymodule') | tojson }};
+       (adjust permission name if using a different slug)
+
+  6. Update the JS script tags (in load order):
+       <script src="{{ url_for('static', filename='mymodule/js/components/core.js') }}"></script>
+       <script src="{{ url_for('static', filename='mymodule/js/components/ui.js') }}"></script>
+       <script src="{{ url_for('static', filename='mymodule/js/components/router.js') }}"></script>
+       <script src="{{ url_for('static', filename='mymodule/js/pages/main.js') }}"></script>
+       <script src="{{ url_for('static', filename='mymodule/js/components/app.js') }}"></script>
+
+IMPORTANT: The JS load order must always be:
+  core.js → ui.js → router.js → main.js → app.js
+  Each script depends on the globals exported by the previous one.
+
+
+=====================================================================
+STEP 4 — CREATE core/mymodule/views/components/header.html
+=====================================================================
+
+Reuse the shared general header by passing brand variables:
+
+  {% with
+      brand_prefix="Mymodule",
+      brand_suffix="Core",
+      brand_icon="mymodule",
+      show_back=True,
+      back_url="/home",
+      show_logout=True,
+      show_theme_toggle=True
+  %}
+    {% include "general/views/components/header.html" %}
+  {% endwith %}
+
+Available parameters for the general header:
+  brand_prefix      → Text before the styled suffix (e.g. "Template")
+  brand_suffix      → Bold/colored text (e.g. "Core")
+  brand_icon        → Icon slug used in CSS (add CSS if needed)
+  show_back         → Boolean — show the back-to-Home button
+  back_url          → href for the back button
+  show_logout       → Boolean — show the logout button
+  show_theme_toggle → Boolean — show the dark/light toggle
+
+
+=====================================================================
+STEP 5 — CREATE core/mymodule/views/pages/mymodule.html
+=====================================================================
+
+This is the content rendered inside the shell's <main class="main-container">.
+Use the two-column layout pattern (same as template):
+
+  <div class="mm-layout" id="mymodule-layout">
+
+    <!-- LEFT PANEL: Brand, nav, metadata -->
+    <aside class="mm-left-panel">
+      <div class="mm-brand">
+        <span class="mm-badge">🔧 My Module</span>
+        <h1 class="mm-title">Mymodule</h1>
+        <p class="mm-subtitle">Short description here.</p>
+      </div>
+
+      <nav class="mm-nav" role="tablist">
+        <button class="mm-nav-btn active" data-route="/overview"
+                id="tab-overview" role="tab" aria-controls="mm-view-overview">
+          📋 Overview
+        </button>
+        <!-- Add more tabs here -->
+      </nav>
+    </aside>
+
+    <!-- RIGHT PANEL: Tab views -->
+    <main class="mm-right-panel">
+      <section class="mm-view active" id="mm-view-overview"
+               role="tabpanel" aria-labelledby="tab-overview">
+        <h2 class="mm-view-heading">Overview</h2>
+        <!-- Your content here -->
+      </section>
+    </main>
+
+  </div>
+
+KEY RULES:
+  • View sections use class "mm-view" and IDs "mm-view-<routename>"
+  • Nav buttons use class "mm-nav-btn" and attribute data-route="/<routename>"
+  • The route name in data-route must match what you register in main.js
+  • Only the view with class "active" is visible (controlled by MymoduleUI)
+
+
+=====================================================================
+STEP 6 — CREATE static/mymodule/css/style.css
+=====================================================================
+
+This is the CSS master importer. It must import in this order:
+
+  /* General foundations (always first) */
+  @import url('../../general/css/components/variables.css');
+  @import url('../../general/css/components/reset.css');
+  @import url('../../general/css/components/toast.css');
+  @import url('../../general/css/components/header.css');
+
+  /* Module-specific components */
+  @import url('components/layout.css');
+  @import url('components/card.css');
+  /* Add more: @import url('components/myfeature.css'); */
+
+DO NOT put any actual CSS rules in style.css — only @import statements.
+
+
+=====================================================================
+STEP 7 — CREATE static/mymodule/css/components/layout.css
+=====================================================================
+
+Controls the full-page, zero-scroll layout. Copy from
+static/template/css/components/layout.css and replace class prefixes:
+
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex: 1 1 0;
+    min-height: 0;
+    padding: 4.8rem 2rem 1.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .mm-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1240px;
+    height: calc(100vh - 6.2rem);
+    max-height: 680px;
+    align-items: stretch;
+  }
+
+  .mm-left-panel, .mm-right-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--r-xl);
+    padding: 1.5rem;
+    overflow: hidden;
+  }
+
+CRITICAL: Always set overflow: hidden on the outer containers. Let only
+the inner view panels use overflow-y: auto to scroll internally.
+
+
+=====================================================================
+STEP 8 — CREATE static/mymodule/js/components/core.js
+=====================================================================
+
+Exports: window.MymoduleCore
+
+This is the state store and event bus for your module. Copy from
+static/template/js/components/core.js and rename:
+
+  • Class name: MymoduleCore
+  • window export: window.MymoduleCore = new MymoduleCore()
+  • Initial state: customize this.state for your module's data
+
+Keep the on(event, cb), off(event, cb), emit(event, data) pattern —
+other components depend on it for reactive updates.
+
+
+=====================================================================
+STEP 9 — CREATE static/mymodule/js/components/ui.js
+=====================================================================
+
+Exports: window.MymoduleUI
+
+Handles all DOM updates. Copy from static/template/js/components/ui.js
+and update the CSS class selectors to match your new prefix:
+
+  switchView(targetViewEl) {
+    // Update these selectors to match YOUR layout classes
+    document.querySelectorAll('.mm-view').forEach(v => v.classList.remove('active'));
+    targetViewEl.classList.add('active');
+
+    document.querySelectorAll('.mm-nav-btn').forEach(btn => {
+      const route = btn.getAttribute('data-route') || '';
+      const viewSuffix = targetViewEl.id.replace('mm-view-', '');
+      btn.classList.toggle('active', route === '/' + viewSuffix);
+    });
+  }
+
+Also keep notify(message, type, duration) — it wraps window.showToast.
+
+
+=====================================================================
+STEP 10 — CREATE static/mymodule/js/components/router.js
+=====================================================================
+
+Exports: window.MymoduleRouter
+
+Controls hash-based in-page navigation. Copy from
+static/template/js/components/router.js and:
+
+  • Rename class: MymoduleRouter
+  • Update default route: this.defaultRoute = '/overview'
+  • Update page title prefix: 'AuthGuard — Mymodule'
+  • Update window export: window.MymoduleRouter = new MymoduleRouter()
+
+The router:
+  • Listens to window hashchange events
+  • Intercepts clicks on [data-route] elements
+  • Checks permissions before switching views
+  • Calls MymoduleUI.switchView() to update the DOM
+  • Fires onEnter() lifecycle hooks registered in main.js
+
+
+=====================================================================
+STEP 11 — CREATE static/mymodule/js/pages/main.js
+=====================================================================
+
+Exports: window.MymoduleMainPage
+
+This is where you register routes and bind page events. Customize freely:
+
+  function initMainPage() {
+
+    // Register routes
+    if (window.MymoduleRouter) {
+      window.MymoduleRouter
+        .register('/overview', {
+          viewId: 'mm-view-overview',
+          title: 'Overview',
+          onEnter: function() { /* lifecycle logic */ }
+        })
+        .register('/settings', {
+          viewId: 'mm-view-settings',
+          title: 'Settings'
+        });
+    }
+
+    // Bind UI events
+    var myBtn = document.getElementById('my-button-id');
+    if (myBtn && window.MymoduleCore) {
+      myBtn.addEventListener('click', function() {
+        // Call MymoduleCore methods, update state, trigger UI
+      });
+    }
+
+    // React to state changes
+    if (window.MymoduleCore) {
+      window.MymoduleCore.on('stateChange', function(state) {
+        // Update DOM based on new state
+      });
+    }
+  }
+
+  window.MymoduleMainPage = { init: initMainPage };
+
+RULE: Every route registered here must have a matching:
+  (a) <section class="mm-view" id="mm-view-<name>"> in mymodule.html
+  (b) <button data-route="/<name>" class="mm-nav-btn"> in the left nav
+
+
+=====================================================================
+STEP 12 — CREATE static/mymodule/js/components/app.js
+=====================================================================
+
+Exports: window.MymoduleApp
+
+This is the bootstrap entry point — the last file loaded. It wires
+everything together:
+
+  function initMymoduleApp() {
+    // 1. Init page-level logic first (registers routes, binds events)
+    if (window.MymoduleMainPage) window.MymoduleMainPage.init();
+
+    // 2. Init router (reads hash, switches to correct initial view)
+    if (window.MymoduleRouter) window.MymoduleRouter.init();
+  }
+
+  // Auto-boot on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMymoduleApp);
+  } else {
+    initMymoduleApp();
+  }
+
+  window.MymoduleApp = { init: initMymoduleApp };
+
+IMPORTANT: app.js MUST load last. main.js must load before app.js.
+           The shell.html script tags define this load order.
+
+
+=====================================================================
+STEP 13 — CREATE routes/mymodule/__init__.py
+=====================================================================
+
+  """
+  routes/mymodule/__init__.py
+  Mymodule routes package.
+  """
+  from routes.mymodule.page_routes import register_mymodule_page_routes
+  __all__ = ['register_mymodule_page_routes']
+
+
+=====================================================================
+STEP 14 — CREATE routes/mymodule/page_routes.py
+=====================================================================
+
+  """
+  routes/mymodule/page_routes.py
+  Mymodule page routes.
+  """
+  from flask import Blueprint
+  from controllers.mymodule import page_controller
+
+  def register_mymodule_page_routes(bp: Blueprint):
+      bp.add_url_rule(
+          '/mymodule',
+          endpoint='mymodule_page',
+          view_func=page_controller.mymodule_page,
+          methods=['GET']
+      )
+      # Add more URL rules here as your module grows:
+      # bp.add_url_rule('/mymodule/action', endpoint='...', view_func=..., methods=['POST'])
+
+
+=====================================================================
+STEP 15 — CREATE controllers/mymodule/__init__.py
+=====================================================================
+
+  """
+  controllers/mymodule/__init__.py
+  Mymodule controllers package.
+  """
+  from controllers.mymodule import page_controller
+  __all__ = ['page_controller']
+
+
+=====================================================================
+STEP 16 — CREATE controllers/mymodule/page_controller.py
+=====================================================================
+
+  """
+  controllers/mymodule/page_controller.py
+  Page controller for mymodule views.
+  """
+  from flask import render_template, session
+  from services.general.permission_service import permission_required
+  from services.home.home_service import get_current_user
+
+  @permission_required('mymodule')
+  def mymodule_page():
+      """Render the mymodule shell."""
+      user = get_current_user()
+      return render_template(
+          'mymodule/shell.html',
+          active_view='mymodule',
+          server_route='/mymodule',
+          server_user=user,
+          user_session=bool(user),
+          user_permissions=session.get('permissions', [])
+      )
+
+
+=====================================================================
+STEP 17 — REGISTER THE MODULE IN THE SYSTEM
+=====================================================================
+
+17a. routes/__init__.py — import and register the route:
+
+  from routes.mymodule import register_mymodule_page_routes
+  ...
+  register_mymodule_page_routes(router_bp)
+
+17b. controllers/__init__.py — import the controller package:
+
+  import controllers.mymodule as mymodule
+  __all__ = [..., 'mymodule']
+
+17c. services/general/permission_service.py — add to default perms list
+     and add a launch token guard (if using button-based entry):
+
+  perms = ['home', 'body', 'calculator', 'template', 'mymodule']
+
+  if permission_name == 'mymodule':
+      if not session.get('mymodule_access'):
+          return redirect(url_for('router.home_page',
+                                  notice='direct_url_blocked_mymodule'))
+
+17d. controllers/home/home_controller.py — add launch function:
+
+  def launch_mymodule():
+      """Authorized entry: grants access only when clicked from Home."""
+      session['mymodule_access'] = True
+      return redirect('/mymodule')
+
+  And clear the token when user returns to home:
+  session.pop('mymodule_access', None)   ← already done by permission_service
+                                            for permission_name == 'home'
+
+17e. routes/home/page_routes.py — add launch URL:
+
+  bp.add_url_rule('/home/launch/mymodule',
+                  endpoint='launch_mymodule_home',
+                  view_func=home_controller.launch_mymodule,
+                  methods=['GET', 'POST'])
+  bp.add_url_rule('/body/launch/mymodule',
+                  endpoint='launch_mymodule_body',
+                  view_func=home_controller.launch_mymodule,
+                  methods=['GET', 'POST'])
+
+17f. Home dashboard — add the app card in the apps grid view so users
+     can click it to launch the module.
+
+
+=====================================================================
+STEP 18 — VERIFY YOUR MODULE WORKS
+=====================================================================
+
+  1. Restart the server:
+       python server.py
+
+  2. Log in and go to /home.
+
+  3. Click your new module card.
+       → Should redirect to /mymodule.
+       → Shell should render with header and content.
+
+  4. Open browser DevTools Console:
+       → Should see: [Mymodule Module] Initializing...
+       → Should see: [MymoduleRouter] Router initialized.
+       → Should see: ✅ [Mymodule Module] Application fully ready.
+
+  5. Click nav tabs — views should switch without page reload.
+
+  6. Try navigating directly to /mymodule in the address bar:
+       → Should be blocked and redirect to /home with a notice.
+
+  7. Try clicking the nav tabs and pressing browser Back:
+       → Hash routing should restore the correct tab.
+
+
+=====================================================================
+REFERENCE: GLOBAL WINDOW OBJECTS AVAILABLE IN ALL MODULES
+=====================================================================
+
+  window.DB.getCurrentUser()       → Current authenticated user object
+  window.DB.setCurrentUser(user)   → Update client-side user record
+  window.__SERVER_USER__           → User object from Flask session (read-only)
+  window.__USER_PERMISSIONS__      → Permissions array from Flask session
+  window.__USER_SESSION__          → Boolean: is user logged in?
+  window.__SERVER_ROUTE__          → Current server route string
+  window.hasPermission(perm)       → Permission check helper function
+  window.showToast(msg, type, ms)  → Toast notification (type: success/error/info/warning)
+  window.ThemeManager              → Dark/light theme manager
+  window.Loader                    → Page loading state manager
+
+CSS CUSTOM PROPERTIES (from variables.css):
+  --bg-page          → Page background
+  --bg-card          → Card/panel background
+  --bg-input         → Input/inset background
+  --bg-muted         → Subtle background
+  --border-light     → Subtle border color
+  --text-title       → Title text color
+  --text-headline    → Strong text color
+  --text-body        → Body text color
+  --text-muted       → Muted/secondary text
+  --color-primary    → Primary accent color (#6366f1)
+  --color-primary-hover
+  --r-sm / --r-md / --r-lg / --r-xl  → Border radius tokens
+  --font-sans        → Plus Jakarta Sans
+  --shadow-card-lg   → Large card drop shadow
+  --shadow-btn       → Button drop shadow

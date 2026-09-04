@@ -1,0 +1,385 @@
+/* ==========================================================================
+   AuthGuard — Contact Module Modals & Popup Dialogs CSS
+   ========================================================================== */
+
+/* ── Modal Backdrop & Dialog ─────────────────────────────────────────────── */
+.ct-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: ct-modal-fadein 0.2s ease-out;
+}
+
+@keyframes ct-modal-fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ct-modal {
+  width: 90%;
+  max-width: 460px;
+  max-height: 80vh;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: ct-modal-pop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes ct-modal-pop {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.ct-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.ct-modal-header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.ct-modal-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-title);
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.ct-modal-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0.15rem 0 0;
+}
+
+.ct-btn-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+}
+
+.ct-btn-close:hover {
+  color: var(--text-title);
+  background: var(--bg-hover, rgba(0, 0, 0, 0.05));
+}
+
+.ct-modal-body {
+  padding: 1.25rem 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.ct-modal-search {
+  margin-bottom: 0.85rem;
+}
+
+.ct-modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.ct-modal-contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-page);
+  gap: 0.75rem;
+  transition: border-color 0.18s ease;
+}
+
+.ct-modal-contact-row:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.ct-modal-contact-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+.ct-modal-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ct-modal-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--text-title);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-modal-uname {
+  font-size: 0.74rem;
+  color: var(--color-primary);
+  font-family: var(--font-mono, monospace);
+}
+
+.ct-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+}
+
+/* ── Contact Detail Popup Modal (Modern Profile Card) ─────────────────────── */
+.ct-modal--detail {
+  max-width: 400px;
+}
+
+.ct-detail-profile-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.ct-detail-avatar-wrap {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.ct-detail-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.28);
+  overflow: hidden;
+  border: 3px solid var(--bg-card);
+}
+
+.ct-detail-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ct-detail-avatar-wrap .ct-card-online-dot {
+  width: 16px;
+  height: 16px;
+  bottom: 2px;
+  right: 2px;
+  border-width: 3px;
+}
+
+.ct-detail-name {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-title);
+  letter-spacing: -0.015em;
+  margin: 0 0 0.25rem;
+}
+
+.ct-detail-uname-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-family: var(--font-mono, monospace);
+  background: rgba(99, 102, 241, 0.08);
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  margin-bottom: 0.65rem;
+}
+
+.ct-detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.ct-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+}
+
+.ct-pill--online {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.ct-pill--offline {
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.ct-pill--saved {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.ct-pill--fav {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.ct-pill--muted {
+  color: var(--text-muted);
+  background: var(--bg-muted, rgba(0, 0, 0, 0.03));
+  border: 1px solid var(--border-light);
+}
+
+.ct-detail-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-top: 1rem;
+}
+
+.ct-detail-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  background: var(--bg-page);
+  border: 1px solid var(--border-light);
+  transition: border-color 0.18s ease;
+}
+
+.ct-detail-info-item:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+.ct-detail-info-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.ct-detail-info-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+}
+
+.ct-detail-info-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.ct-detail-info-value {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-title);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-btn-copy {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.3rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+}
+
+.ct-btn-copy:hover {
+  color: var(--color-primary);
+  background: var(--bg-hover, rgba(0, 0, 0, 0.05));
+}
+
+.ct-detail-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.ct-btn--saved-solid {
+  background: rgba(16, 185, 129, 0.12);
+  color: #10b981;
+  border: 1.5px solid rgba(16, 185, 129, 0.3);
+}
+
+.ct-btn--saved-solid:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.ct-btn--fav-active {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border: 1.5px solid rgba(245, 158, 11, 0.35);
+}
+
+.ct-btn--fav-active:hover {
+  background: rgba(245, 158, 11, 0.2);
+}

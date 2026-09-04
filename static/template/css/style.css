@@ -1,0 +1,13 @@
+/* ==========================================================================
+   AuthGuard — Template Module Stylesheet Master (Component Importer)
+   ========================================================================== */
+
+/* ── General Design Tokens & Shared Components ─────────────────────────── */
+@import url('../../general/css/components/variables.css');
+@import url('../../general/css/components/reset.css');
+@import url('../../general/css/components/toast.css');
+@import url('../../general/css/components/header.css');
+
+/* ── Template Module Sub-Components ────────────────────────────────────── */
+@import url('components/layout.css');
+@import url('components/card.css');

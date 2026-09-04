@@ -1,0 +1,103 @@
+<!-- ═══════════════════════════════════════════════════════════
+     RIGHT PANEL — Apps Grid Component
+═══════════════════════════════════════════════════════════════ -->
+<section class="hd-apps-panel" id="hd-apps-panel">
+
+  <!-- Toolbar: Search + Sort -->
+  <div class="hd-toolbar">
+    <div class="hd-search-wrap">
+      <svg class="hd-search-icon" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input
+        type="text"
+        id="hd-search-input"
+        class="hd-search-input"
+        placeholder="Search modules…"
+        autocomplete="off"
+      >
+    </div>
+    <div class="hd-sort-wrap">
+      <label class="hd-sort-label" for="hd-sort-select">Sort by:</label>
+      <select id="hd-sort-select" class="hd-sort-select">
+        <option value="recent">Recent</option>
+        <option value="name">Name</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- App Grid -->
+  <div class="hd-apps-grid" id="hd-apps-grid">
+
+    <!-- Calculator App Card -->
+    <a href="/home/launch/calculator" id="btn-open-calculator" class="hd-app-card" data-name="Calculator" data-index="1">
+      <div class="hd-app-card-menu" tabindex="-1" title="Options">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      </div>
+      <div class="hd-app-icon hd-app-icon--calc">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="2" width="16" height="20" rx="2"/>
+          <line x1="8" y1="6" x2="16" y2="6"/>
+          <path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/>
+          <path d="M12 14h.01"/><path d="M8 14h.01"/>
+          <path d="M12 18h.01"/><path d="M8 18h.01"/>
+        </svg>
+      </div>
+      <div class="hd-app-name">Calculator</div>
+    </a>
+
+    <!-- Template App Card -->
+    <a href="/home/launch/template" id="btn-open-template" class="hd-app-card" data-name="Template" data-index="2">
+      <div class="hd-app-card-menu" tabindex="-1" title="Options">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      </div>
+      <div class="hd-app-icon hd-app-icon--template">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="16 18 22 12 16 6"/>
+          <polyline points="8 6 2 12 8 18"/>
+        </svg>
+      </div>
+      <div class="hd-app-name">Template</div>
+    </a>
+
+    <!-- Contact App Card -->
+    <a href="/home/launch/contact" id="btn-open-contact" class="hd-app-card" data-name="Contact" data-index="3">
+      <div class="hd-app-card-menu" tabindex="-1" title="Options">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      </div>
+      <div class="hd-app-icon hd-app-icon--contact">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <div class="hd-app-name">Contact</div>
+    </a>
+
+    <!-- Calendar App Card -->
+    <a href="/home/launch/calendar" id="btn-open-calendar" class="hd-app-card" data-name="Calendar" data-index="4">
+      <div class="hd-app-card-menu" tabindex="-1" title="Options">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+      </div>
+      <div class="hd-app-icon hd-app-icon--calendar">
+        <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <div class="hd-app-name">Calendar</div>
+    </a>
+
+    <!-- Add New App Placeholder -->
+    <div class="hd-app-card hd-app-card--add" id="hd-add-app" title="More modules coming soon">
+      <div class="hd-add-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <div class="hd-app-name hd-add-label">Add New App</div>
+    </div>
+
+  </div>
+
+</section>

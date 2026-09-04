@@ -1,0 +1,122 @@
+/* ==========================================================================
+   Calendar Module — Day View (Proportional Timeline)
+   ========================================================================== */
+
+.day-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.day-header-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1.25rem;
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  background: var(--bg-card, #f8fafc);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .day-header-card {
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.day-header-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+  margin: 0;
+}
+
+.day-header-card p {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-color, #6C63FF);
+  background: rgba(108, 99, 255, 0.1);
+  padding: 0.2rem 0.6rem;
+  border-radius: 14px;
+  margin: 0;
+}
+
+.day-body-scrollable {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  position: relative;
+}
+
+.day-time-grid {
+  display: grid;
+  grid-template-columns: 65px 1fr;
+  position: relative;
+}
+
+.day-time-gutter {
+  border-right: 1px solid var(--border-color, rgba(0, 0, 0, 0.06));
+}
+
+.day-slot-label {
+  height: 48px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted, #94a3b8);
+  text-align: right;
+  padding-right: 0.5rem;
+  transform: translateY(-7px);
+}
+
+.day-events-column {
+  position: relative;
+  height: calc(48px * 24);
+}
+
+.day-slot-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 48px;
+  border-bottom: 1px solid var(--border-color, rgba(0, 0, 0, 0.04));
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.day-slot-line:hover {
+  background: rgba(108, 99, 255, 0.03);
+}
+
+.day-event-card {
+  position: absolute;
+  left: 8px;
+  right: 12px;
+  border-radius: 9px;
+  padding: 0.45rem 0.75rem;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.day-event-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  z-index: 5;
+}
+
+.day-event-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+}
+
+.day-event-meta {
+  font-size: 0.72rem;
+  opacity: 0.92;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

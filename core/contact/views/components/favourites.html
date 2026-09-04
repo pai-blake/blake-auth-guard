@@ -1,0 +1,27 @@
+<!-- ───────────────────────────────────────────────────────────────────
+     VIEW 3: FAVOURITE
+     ─────────────────────────────────────────────────────────────────── -->
+<section class="ct-view" id="ct-view-favourite" role="tabpanel" aria-labelledby="tab-favourite">
+  <header class="ct-view-header">
+    <div>
+      <h2 class="ct-view-heading">Favourites</h2>
+      <p class="ct-view-subheading">Pinned contacts</p>
+    </div>
+  </header>
+
+  <!-- Favourites Grid with "+ Add to Favourite" Card at the End -->
+  <div class="ct-results-container" id="ct-favourites-area">
+    <div class="ct-cards-grid" id="ct-favourites-grid">
+      <!-- Dynamically populated favourite cards with "+ Add to Favourite" card placed at the end -->
+      <div class="ct-card ct-card--add" id="btn-add-favourite-card" role="button" tabindex="0" title="Add contact to favourites">
+        <div class="ct-card-add-icon">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </div>
+        <span class="ct-card-add-label">Add to Favourite</span>
+      </div>
+    </div>
+  </div>
+</section>

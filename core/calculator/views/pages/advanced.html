@@ -1,0 +1,90 @@
+<!-- Advanced Mathematics Calculator View (Page) -->
+<div class="calculator-view advanced-view" id="view-advanced">
+
+  <!-- Row 1: Calculus & Higher Math Operators -->
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-diff" data-adv="diff" title="Numerical Differentiation d/dx">d/dx</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-integral" data-adv="integral" title="Definite Integration ∫ dx">∫ dx</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-sum" data-adv="sum" title="Summation Σ">Σ</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-lim" data-adv="lim" title="Limit lim x→a">lim</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-gcd" data-adv-op="gcd" title="Greatest Common Divisor">gcd</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-lcm" data-adv-op="lcm" title="Least Common Multiple">lcm</button>
+  <button type="button" class="calc-btn clear-btn adv-sm" id="adv-clear" data-action="clear">C</button>
+  <button type="button" class="calc-btn delete-btn adv-sm" id="adv-delete" data-action="delete">DEL</button>
+
+  <!-- Row 2: Hyperbolic & Combinatorics -->
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="sinh" title="Hyperbolic Sine">sinh</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="cosh" title="Hyperbolic Cosine">cosh</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="tanh" title="Hyperbolic Tangent">tanh</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-adv-op="nPr" title="Permutation nPr">nPr</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-adv-op="nCr" title="Combination nCr">nCr</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-adv-op="mod" title="Modulo">mod</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-action="paren-open">(</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-action="paren-close">)</button>
+
+  <!-- Row 3: Inverse Trig & Roots -->
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="asin" title="Arcsine">asin</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="acos" title="Arccosine">acos</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="atan" title="Arctangent">atan</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="sqrt" title="Square Root">√</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="cbrt" title="Cube Root">∛</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="power-n" title="x to power y">xʸ</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="abs" title="Absolute Value">|x|</button>
+  <button type="button" class="calc-btn operator-btn adv-sm" data-operator="/">÷</button>
+
+  <!-- Row 4: Logarithms & 7 8 9 × -->
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="log2" title="Logarithm Base 2">log₂</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="log" title="Logarithm Base 10">log₁₀</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="ln" title="Natural Logarithm">ln</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="exp" title="Exponential eˣ">eˣ</button>
+  <button type="button" class="calc-btn number-btn" data-number="7">7</button>
+  <button type="button" class="calc-btn number-btn" data-number="8">8</button>
+  <button type="button" class="calc-btn number-btn" data-number="9">9</button>
+  <button type="button" class="calc-btn operator-btn" data-operator="*">×</button>
+
+  <!-- Row 5: Powers & 4 5 6 − -->
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="reciprocal" title="1/x">1/x</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="power" title="x squared">x²</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="cube" title="x cubed">x³</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-const="pi" title="Pi constant">π</button>
+  <button type="button" class="calc-btn number-btn" data-number="4">4</button>
+  <button type="button" class="calc-btn number-btn" data-number="5">5</button>
+  <button type="button" class="calc-btn number-btn" data-number="6">6</button>
+  <button type="button" class="calc-btn operator-btn" data-operator="-">−</button>
+
+  <!-- Row 6: Constants & 1 2 3 + -->
+  <button type="button" class="calc-btn function-btn adv-sm" data-const="euler" title="Euler constant">e</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="factorial" title="Factorial !">!</button>
+  <button type="button" class="calc-btn function-btn adv-sm" data-func="percent" title="Percent %">%</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="btn-angle-mode" title="Toggle Radians / Degrees">RAD</button>
+  <button type="button" class="calc-btn number-btn" data-number="1">1</button>
+  <button type="button" class="calc-btn number-btn" data-number="2">2</button>
+  <button type="button" class="calc-btn number-btn" data-number="3">3</button>
+  <button type="button" class="calc-btn operator-btn" data-operator="+">+</button>
+
+  <!-- Row 7: Matrix/Det, Zero, Decimal, Equals -->
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-det" data-adv="det" title="2x2 / 3x3 Matrix Determinant">det</button>
+  <button type="button" class="calc-btn function-btn adv-sm" id="adv-eval-expr" data-adv="eval" title="Evaluate Complex Expression">f(x)</button>
+  <button type="button" class="calc-btn number-btn zero-btn-adv" data-number="0">0</button>
+  <button type="button" class="calc-btn decimal-btn adv-sm" id="adv-decimal" data-action="decimal">.</button>
+  <button type="button" class="calc-btn equals-btn adv-equals" id="adv-equals" data-action="calculate">=</button>
+
+</div>
+
+<!-- Calculus / Advanced Interactive Dialog (Custom Modal for d/dx, ∫ dx, Σ, det) -->
+<dialog id="adv-math-dialog" class="adv-math-dialog">
+  <form method="dialog" class="adv-dialog-card" id="adv-dialog-form">
+    <div class="adv-dialog-header">
+      <h3 id="adv-dialog-title" class="adv-dialog-title">Calculus Assistant</h3>
+      <button type="button" class="adv-dialog-close" id="adv-dialog-close-btn" aria-label="Close dialog">✕</button>
+    </div>
+
+    <div class="adv-dialog-body" id="adv-dialog-body">
+      <!-- Dynamically filled depending on feature -->
+    </div>
+
+    <div class="adv-dialog-footer">
+      <button type="button" class="calc-btn clear-btn" id="adv-dialog-cancel">Cancel</button>
+      <button type="submit" class="calc-btn equals-btn" id="adv-dialog-submit">Compute</button>
+    </div>
+  </form>
+</dialog>

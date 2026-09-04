@@ -1,0 +1,39 @@
+/* ==========================================================================
+   AuthGuard — Calculator Mode Toggle Styles
+   ========================================================================== */
+
+/* Mode Toggle */
+.calculator-mode-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+  padding: 0.35rem;
+  background: var(--bg-muted);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--border-light);
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 0.55rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.toggle-btn:hover {
+  color: var(--text-headline);
+}
+
+.toggle-btn.active {
+  background: var(--bg-card);
+  color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

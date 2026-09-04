@@ -1,0 +1,72 @@
+/* ==========================================================================
+   AuthGuard — Calculator Navbar (Horizontal Top Bar)
+   Unlike the auth vertical corner badge, the calculator uses a real navbar
+   ========================================================================== */
+
+/* Navbar layout */
+.calc-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+  z-index: 200;
+  backdrop-filter: blur(12px);
+}
+
+/* Brand group */
+.calc-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.calc-brand-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  background: var(--overlay-bg, linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.calc-brand-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-headline);
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.calc-brand-sub {
+  font-weight: 500;
+  font-size: 0.9em;
+  opacity: 0.65;
+  margin-left: 0.15em;
+}
+
+/* Right side: buttons */
+.calc-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+/* Push main content below navbar */
+body:has(.calc-navbar) {
+  padding-top: 58px;
+}

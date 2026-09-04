@@ -1,0 +1,28 @@
+/* ==========================================================================
+   AuthGuard — Calendar Core Module Master Stylesheet
+   Modern Glassmorphic Calendar UI & Micro-interactions
+   ========================================================================== */
+
+/* 1. Base Layout & Split View */
+@import url("components/layout.css");
+
+/* 2. Top Toolbar & Navigation Bar */
+@import url("components/header.css");
+
+/* 3. Left Panel Sidebar & Mini-Month Picker */
+@import url("components/sidebar.css");
+
+/* 4. Month View Grid & Event Pills */
+@import url("components/month.css");
+
+/* 5. Week View Time-Slots & Grid */
+@import url("components/week.css");
+
+/* 6. Day View Detail Column */
+@import url("components/day.css");
+
+/* 7. Agenda View Stream */
+@import url("components/agenda.css");
+
+/* 8. Modals, Pickers & Detail Dialog */
+@import url("components/modals.css");

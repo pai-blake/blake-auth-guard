@@ -1,0 +1,188 @@
+<!-- Create / Edit Event Modal -->
+<div class="cal-modal-overlay" id="cal-modal-event" aria-hidden="true" role="dialog" aria-labelledby="cal-modal-title">
+  <div class="cal-modal-container" role="document">
+    <div class="cal-modal-header">
+      <h3 class="cal-modal-heading" id="cal-modal-title">New Event</h3>
+      <button type="button" class="btn-modal-close" id="cal-modal-close" aria-label="Close dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <form class="cal-modal-body" id="cal-event-form" autocomplete="off">
+      <input type="hidden" id="event-form-id" value="" />
+
+      <!-- Title -->
+      <div class="form-group">
+        <label for="event-form-title" class="form-label">Event Title <span class="required">*</span></label>
+        <input type="text" id="event-form-title" class="form-input" placeholder="e.g. Design Sprint Planning" maxlength="140" required />
+      </div>
+
+      <!-- All Day Toggle -->
+      <div class="form-group-inline">
+        <label class="toggle-container" for="event-form-all-day">
+          <input type="checkbox" id="event-form-all-day" />
+          <span class="toggle-slider"></span>
+          <span class="toggle-text">All-Day Event</span>
+        </label>
+      </div>
+
+      <!-- Date & Time Row -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="event-form-start" class="form-label">Start Time <span class="required">*</span></label>
+          <input type="datetime-local" id="event-form-start" class="form-input" required />
+        </div>
+        <div class="form-group">
+          <label for="event-form-end" class="form-label">End Time <span class="required">*</span></label>
+          <input type="datetime-local" id="event-form-end" class="form-input" required />
+        </div>
+      </div>
+
+      <!-- Category & Color -->
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label for="event-form-category" class="form-label">Category</label>
+          <select id="event-form-category" class="form-select">
+            <option value="general">General</option>
+            <option value="work">Work & Projects</option>
+            <option value="personal">Personal</option>
+            <option value="meeting">Meeting</option>
+            <option value="urgent">Urgent</option>
+            <option value="holiday">Holiday</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color Label</label>
+          <div class="color-picker-palette" id="color-picker-palette">
+            <button type="button" class="color-swatch active" data-color="#6C63FF" style="background:#6C63FF;" title="Electric Violet"></button>
+            <button type="button" class="color-swatch" data-color="#4F46E5" style="background:#4F46E5;" title="Indigo"></button>
+            <button type="button" class="color-swatch" data-color="#10B981" style="background:#10B981;" title="Emerald"></button>
+            <button type="button" class="color-swatch" data-color="#F59E0B" style="background:#F59E0B;" title="Amber"></button>
+            <button type="button" class="color-swatch" data-color="#EF4444" style="background:#EF4444;" title="Red"></button>
+            <button type="button" class="color-swatch" data-color="#EC4899" style="background:#EC4899;" title="Pink"></button>
+            <button type="button" class="color-swatch" data-color="#06B6D4" style="background:#06B6D4;" title="Cyan"></button>
+          </div>
+          <input type="hidden" id="event-form-color" value="#6C63FF" />
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="form-group">
+        <label for="event-form-location" class="form-label">Location / Conference Link</label>
+        <input type="text" id="event-form-location" class="form-input" placeholder="e.g. Google Meet, Meeting Room B, or Office" maxlength="256" />
+      </div>
+
+      <!-- Reminder -->
+      <div class="form-group">
+        <label for="event-form-reminder" class="form-label">Reminder</label>
+        <select id="event-form-reminder" class="form-select">
+          <option value="">No reminder</option>
+          <option value="5">5 minutes before</option>
+          <option value="15">15 minutes before</option>
+          <option value="30">30 minutes before</option>
+          <option value="60">1 hour before</option>
+          <option value="1440">1 day before</option>
+        </select>
+      </div>
+
+      <!-- Attendees (Searchable from Contacts/Users) -->
+      <div class="form-group">
+        <label for="event-form-attendees-search" class="form-label">Invite Contacts / Guests</label>
+        <div class="attendees-input-wrapper">
+          <div class="selected-attendees-tags" id="selected-attendees-tags"></div>
+          <input type="text" id="event-form-attendees-search" class="form-input-inline" placeholder="Type name or @username..." autocomplete="off" />
+        </div>
+        <div class="attendees-dropdown-results" id="attendees-dropdown-results" style="display:none;"></div>
+        <input type="hidden" id="event-form-attendees" value="" />
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="event-form-desc" class="form-label">Description / Notes</label>
+        <textarea id="event-form-desc" class="form-textarea" rows="3" placeholder="Add agenda items, notes, or details..." maxlength="2000"></textarea>
+      </div>
+
+      <div class="cal-modal-footer">
+        <button type="button" class="btn btn-secondary" id="cal-modal-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="cal-modal-save">Save Event</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Event Details Popup Modal -->
+<div class="cal-modal-overlay" id="cal-modal-detail" aria-hidden="true" role="dialog">
+  <div class="cal-modal-container cal-detail-container" role="document">
+    <div class="cal-detail-header-strip" id="detail-header-strip"></div>
+    <div class="cal-modal-header cal-detail-header">
+      <div class="cal-detail-badges">
+        <span class="cal-category-badge" id="detail-category-badge">Category</span>
+      </div>
+      <button type="button" class="btn-modal-close" id="cal-detail-close" aria-label="Close dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <div class="cal-detail-body">
+      <h2 class="cal-detail-title" id="detail-title">Event Title</h2>
+      
+      <div class="cal-detail-meta-row">
+        <div class="detail-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="detail-meta-content">
+          <p class="detail-primary-text" id="detail-datetime">Monday, Sep 5 • 10:00 AM - 11:00 AM</p>
+          <span class="detail-secondary-text" id="detail-duration">1 hour</span>
+        </div>
+      </div>
+
+      <div class="cal-detail-meta-row" id="detail-location-row" style="display:none;">
+        <div class="detail-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        </div>
+        <div class="detail-meta-content">
+          <p class="detail-primary-text" id="detail-location">Meeting Location</p>
+        </div>
+      </div>
+
+      <div class="cal-detail-meta-row" id="detail-reminder-row" style="display:none;">
+        <div class="detail-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        </div>
+        <div class="detail-meta-content">
+          <p class="detail-primary-text" id="detail-reminder">15 minutes before</p>
+        </div>
+      </div>
+
+      <div class="cal-detail-meta-row" id="detail-attendees-row" style="display:none;">
+        <div class="detail-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="detail-meta-content">
+          <p class="detail-label">Attendees & Guests</p>
+          <div class="detail-attendees-chips" id="detail-attendees-chips"></div>
+        </div>
+      </div>
+
+      <div class="cal-detail-desc-box" id="detail-desc-box" style="display:none;">
+        <p class="detail-label">Notes</p>
+        <p class="detail-desc-text" id="detail-description"></p>
+      </div>
+    </div>
+
+    <div class="cal-modal-footer cal-detail-footer">
+      <button type="button" class="btn btn-danger btn-delete-event" id="cal-detail-btn-delete">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        <span>Delete</span>
+      </button>
+      <div class="cal-detail-actions-right">
+        <button type="button" class="btn btn-secondary" id="cal-detail-btn-close">Close</button>
+        <button type="button" class="btn btn-primary" id="cal-detail-btn-edit">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>Edit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

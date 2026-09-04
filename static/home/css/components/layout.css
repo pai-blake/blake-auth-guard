@@ -1,0 +1,69 @@
+/* ==========================================================================
+   AuthGuard — Home Module Layout & Zero-Scroll Framework
+   ========================================================================== */
+
+/* ── Page Base ─────────────────────────────────────────────────────────── */
+html, body {
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+}
+
+/* ── Main Container (Centered under top navbar) ────────────────────────── */
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 4.8rem 2.5rem 1.5rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ── Two-Panel Layout (Balanced & Zero-Scroll) ─────────────────────────── */
+.hd-layout {
+  display: grid;
+  grid-template-columns: 310px 1fr;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1240px;
+  height: calc(100vh - 6.2rem);
+  max-height: 660px;
+  align-items: stretch;
+  animation: hd-fadein 0.3s ease-out;
+}
+
+@keyframes hd-fadein {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .main-container {
+    padding: 4.2rem 1rem 1rem;
+  }
+
+  .hd-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+    overflow-y: auto;
+  }
+}
+
+/* ── Hide scrollbars (still scrollable internally) ─────────────────────── */
+.hd-profile-panel,
+.hd-apps-panel {
+  scrollbar-width: none;       /* Firefox */
+  -ms-overflow-style: none;    /* IE / Edge */
+}
+
+.hd-profile-panel::-webkit-scrollbar,
+.hd-apps-panel::-webkit-scrollbar {
+  display: none;               /* Chrome / Safari / Opera */
+}

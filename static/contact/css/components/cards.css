@@ -1,0 +1,514 @@
+/* ==========================================================================
+   AuthGuard — Contact Module Cards Grid, Inputs & Buttons CSS
+   ========================================================================== */
+
+/* ── Search Bar & Inputs ─────────────────────────────────────────────────── */
+.ct-search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.ct-search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.ct-search-icon {
+  position: absolute;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.ct-input {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-input, var(--bg-page));
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.ct-input:focus {
+  border-color: var(--color-primary);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.ct-input--sm {
+  padding: 0.52rem 1rem 0.52rem 2.25rem;
+  font-size: 0.84rem;
+  border-radius: 10px;
+}
+
+.ct-btn-clear {
+  position: absolute;
+  right: 0.85rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.ct-btn-clear:hover {
+  color: var(--text-title);
+  background: var(--bg-hover, rgba(0, 0, 0, 0.05));
+}
+
+/* ── Toolbar & Filters ───────────────────────────────────────────────────── */
+.ct-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  flex-shrink: 0;
+}
+
+.ct-filter-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 380px;
+}
+
+.ct-filter-search .ct-search-icon {
+  left: 0.75rem;
+}
+
+.ct-sort-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ct-sort-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.ct-select {
+  padding: 0.48rem 1.75rem 0.48rem 0.75rem;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-body);
+  font-family: var(--font-sans);
+  font-size: 0.825rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ct-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+/* ── Cards Grid (Executive Modern Card System — 4 Column Grid) ─────────── */
+.ct-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.1rem;
+  width: 100%;
+}
+
+/* ── Contact Card ────────────────────────────────────────────────────────── */
+.ct-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 16px;
+  padding: 1.3rem 0.95rem 1.15rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ct-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ct-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.03);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.ct-card:hover::before {
+  opacity: 1;
+}
+
+/* Avatar container */
+.ct-card-avatar-wrap {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.ct-card-avatar {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  box-shadow: 0 5px 14px rgba(99, 102, 241, 0.22);
+  overflow: hidden;
+  border: 2px solid var(--bg-card);
+}
+
+.ct-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ct-card-online-dot {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 2.5px solid var(--bg-card);
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.3);
+}
+
+.ct-card-online-dot.offline {
+  background: #9ca3af;
+  box-shadow: none;
+}
+
+.ct-card-name {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--text-title);
+  letter-spacing: -0.015em;
+  margin: 0 0 0.2rem;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ct-card-username {
+  display: inline-block;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  font-family: var(--font-mono, monospace);
+  background: rgba(99, 102, 241, 0.08);
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  margin-bottom: 0.25rem;
+}
+
+.ct-card-email {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Card Action Buttons */
+.ct-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin-top: auto;
+}
+
+.ct-card-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.48rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-page);
+  color: var(--text-body);
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.ct-card-btn svg {
+  flex-shrink: 0;
+}
+
+.ct-card-btn:hover {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.25);
+}
+
+.ct-card-btn--saved {
+  background: rgba(16, 185, 129, 0.08);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.ct-card-btn--saved:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
+}
+
+.ct-card-fav-btn {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1.5px solid var(--border-light);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.ct-card-fav-btn svg {
+  transition: transform 0.18s ease;
+}
+
+.ct-card-fav-btn:hover {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.3);
+  transform: scale(1.05);
+}
+
+.ct-card-fav-btn.active {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.ct-card-fav-btn.active svg {
+  fill: #f59e0b;
+}
+
+/* ── "+ Add to Favourite" Card (Refined modern dashed border) ─────────────── */
+.ct-card--add {
+  border: 2px dashed var(--border-medium, #cbd5e1);
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+  justify-content: center;
+  min-height: 200px;
+  border-radius: 16px;
+}
+
+.ct-card--add:hover {
+  border-color: var(--color-primary);
+  background: rgba(99, 102, 241, 0.03);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.08);
+}
+
+.ct-card--add:hover::before {
+  display: none;
+}
+
+.ct-card-add-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--bg-muted, rgba(0, 0, 0, 0.03));
+  border: 1.5px solid var(--border-light);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ct-card--add:hover .ct-card-add-icon {
+  background: var(--color-primary);
+  color: #ffffff;
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+  transform: scale(1.06);
+}
+
+.ct-card-add-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-secondary, #64748b);
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.ct-card--add:hover .ct-card-add-label {
+  color: var(--color-primary);
+}
+
+/* ── Empty State ─────────────────────────────────────────────────────────── */
+.ct-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  margin: auto;
+}
+
+.ct-empty-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.ct-empty-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-title);
+  letter-spacing: -0.015em;
+  margin: 0 0 0.4rem;
+}
+
+.ct-empty-text {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  max-width: 380px;
+  margin: 0 0 1.25rem;
+  line-height: 1.45;
+}
+
+/* ── Loading Spinner ─────────────────────────────────────────────────────── */
+.ct-loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.ct-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2.5px solid rgba(99, 102, 241, 0.15);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: ct-spin 0.75s linear infinite;
+}
+
+@keyframes ct-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.ct-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.52rem 1rem;
+  border-radius: 10px;
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ct-btn--primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #4f46e5 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+}
+
+.ct-btn--primary:hover {
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.ct-btn--secondary {
+  background: var(--bg-card);
+  color: var(--text-body);
+  border-color: var(--border-light);
+}
+
+.ct-btn--secondary:hover {
+  background: var(--bg-hover, rgba(0, 0, 0, 0.04));
+  border-color: var(--text-muted);
+}
+
+.ct-btn--danger {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.8rem;
+}
+
+.ct-btn--danger:hover {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 3px 10px rgba(239, 68, 68, 0.25);
+}

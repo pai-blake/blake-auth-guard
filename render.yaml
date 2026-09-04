@@ -1,0 +1,35 @@
+# render.yaml — Render Infrastructure-as-Code
+# Defines the AuthGuard web service and links it to the PostgreSQL database.
+# Render reads this file automatically when you connect your GitHub repo.
+
+services:
+  - type: web
+    name: authguard
+    env: python
+    region: oregon           # Change to: frankfurt, singapore, ohio, virginia
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --preload
+    healthCheckPath: /auth
+    envVars:
+      # DATABASE_URL is automatically injected from the linked database below
+      - key: DATABASE_URL
+        fromDatabase:
+          name: authguard-db
+          property: connectionString
+
+      # Render auto-injects RENDER=true — used for SESSION_COOKIE_SECURE
+      - key: FLASK_ENV
+        value: production
+
+      # All other secrets must be added manually in Render Dashboard → Environment
+      # SECRET_KEY, EMAIL_USER, EMAIL_PASS, GOOGLE_CLIENT_ID,
+      # GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET,
+      # DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET
+
+databases:
+  - name: authguard-db
+    plan: free
+    databaseName: authguard
+    user: authguard_user
+    region: oregon           # Must match web service region above

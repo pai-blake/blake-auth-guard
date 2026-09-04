@@ -1,0 +1,11 @@
+/* ==========================================================================
+   AuthGuard — Calculator Module Stylesheet Manifest
+   ========================================================================== */
+
+/* 1. Layout & Card Styles */
+@import url('components/layout.css');
+@import url('components/display.css');
+@import url('components/buttons.css');
+@import url('components/toggle.css');
+@import url('components/theme.css');
+@import url('components/responsive.css');

@@ -1,0 +1,35 @@
+<!-- ═══════════════════════════════════════════════════════════
+     UNSAVED CHANGES CONFIRMATION MODAL COMPONENT
+═══════════════════════════════════════════════════════════════ -->
+<div class="hd-modal-overlay hd-hidden" id="hd-unsaved-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="hd-modal-card">
+    <div class="hd-modal-header">
+      <div class="hd-modal-icon-wrap hd-modal-icon-wrap--warning">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f59e0b" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <div>
+        <h3 class="hd-modal-title">Unsaved Profile Changes</h3>
+        <p class="hd-modal-subtitle">You have unsaved changes to your profile.</p>
+      </div>
+    </div>
+
+    <div class="hd-modal-body">
+      <p class="hd-modal-desc">
+        Would you like to save your edits before leaving, or discard them?
+      </p>
+    </div>
+
+    <div class="hd-modal-actions hd-modal-actions--unsaved">
+      <button type="button" class="hd-modal-btn hd-modal-btn--cancel" id="hd-unsaved-modal-cancel">
+        Keep Editing
+      </button>
+      <button type="button" class="hd-modal-btn hd-modal-btn--discard" id="hd-unsaved-modal-discard">
+        Discard &amp; Leave
+      </button>
+      <button type="button" class="hd-modal-btn hd-modal-btn--primary" id="hd-unsaved-modal-save">
+        <span class="hd-btn-text">Save &amp; Continue</span>
+        <span class="hd-spinner hd-hidden"></span>
+      </button>
+    </div>
+  </div>
+</div>

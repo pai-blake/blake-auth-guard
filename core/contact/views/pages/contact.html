@@ -1,0 +1,29 @@
+<div class="ct-layout" id="contact-layout">
+
+  <!-- Left Sidebar Panel -->
+  {% include "contact/views/components/sidebar.html" %}
+
+  <!-- Right Active View Panels -->
+  <main class="ct-right-panel" id="ct-right-panel">
+    <!-- View 1: Search -->
+    {% include "contact/views/components/search.html" %}
+
+    <!-- View 2: All Contacts -->
+    {% include "contact/views/components/all_contacts.html" %}
+
+    <!-- View 3: Favourites -->
+    {% include "contact/views/components/favourites.html" %}
+
+    <!-- View 4: Manage Pages -->
+    {% include "contact/views/components/manage_pages.html" %}
+
+    <!-- Dynamic Custom View Containers -->
+    <div id="ct-dynamic-views-container">
+      <!-- Dynamic custom page views (e.g. ct-view-page-custom_xyz) will be rendered here -->
+    </div>
+  </main>
+
+  <!-- Modals -->
+  {% include "contact/views/components/modals.html" %}
+
+</div>

@@ -1,0 +1,100 @@
+<!-- Calendar Subheader / Action Toolbar -->
+<div class="calendar-toolbar" id="calendar-toolbar" role="toolbar" aria-label="Calendar navigation and view options">
+  <div class="calendar-toolbar-left">
+    <button class="btn-today" id="cal-btn-today" title="Jump to today">Today</button>
+    <div class="calendar-nav-group">
+      <button class="btn-icon btn-nav-prev" id="cal-btn-prev" aria-label="Previous period" title="Previous">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="btn-icon btn-nav-next" id="cal-btn-next" aria-label="Next period" title="Next">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+    <h2 class="calendar-period-title" id="cal-period-title">September 2026</h2>
+  </div>
+
+  <div class="calendar-toolbar-right">
+    <!-- View Switcher -->
+    <div class="calendar-view-selector" role="radiogroup" aria-label="Calendar View">
+      <button type="button" class="view-btn active" data-view="month" id="btn-view-month">Month</button>
+      <button type="button" class="view-btn" data-view="week" id="btn-view-week">Week</button>
+      <button type="button" class="view-btn" data-view="day" id="btn-view-day">Day</button>
+      <button type="button" class="view-btn" data-view="agenda" id="btn-view-agenda">Agenda</button>
+    </div>
+
+    <!-- Quick Action: Create Event -->
+    <button type="button" class="btn-create-event" id="btn-open-create-event">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+      <span>New Event</span>
+    </button>
+  </div>
+</div>
+
+<div class="calendar-workspace" id="calendar-workspace">
+  <!-- Left Panel / Sidebar -->
+  {% include "calendar/views/components/sidebar.html" %}
+
+  <!-- Main View Area (Month / Week / Day / Agenda) -->
+  <section class="calendar-views-container" id="calendar-views-container" aria-live="polite">
+    <!-- Month View -->
+    <div class="calendar-view month-view active" id="view-month" role="region" aria-label="Month View">
+      <div class="month-header-days" id="month-header-days">
+        <span class="day-col-header">Sun</span>
+        <span class="day-col-header">Mon</span>
+        <span class="day-col-header">Tue</span>
+        <span class="day-col-header">Wed</span>
+        <span class="day-col-header">Thu</span>
+        <span class="day-col-header">Fri</span>
+        <span class="day-col-header">Sat</span>
+      </div>
+      <div class="month-days-grid" id="month-days-grid">
+        <!-- Day cells dynamically rendered by CalendarUI -->
+      </div>
+    </div>
+
+    <!-- Week View -->
+    <div class="calendar-view week-view" id="view-week" role="region" aria-label="Week View" style="display: none;">
+      <div class="week-header-row" id="week-header-row">
+        <div class="time-gutter-header"></div>
+        <div class="week-day-headers" id="week-day-headers">
+          <!-- 7 day headers with dates rendered by UI -->
+        </div>
+      </div>
+      <div class="week-body-scrollable" id="week-body-scrollable">
+        <div class="week-time-grid" id="week-time-grid">
+          <!-- 24 hour rows with 7 columns -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Day View -->
+    <div class="calendar-view day-view" id="view-day" role="region" aria-label="Day View" style="display: none;">
+      <div class="day-header-card" id="day-header-card">
+        <h3 id="day-view-date-title">Day, Date</h3>
+        <p id="day-view-event-count">0 events</p>
+      </div>
+      <div class="day-body-scrollable" id="day-body-scrollable">
+        <div class="day-time-grid" id="day-time-grid">
+          <!-- 24 hour slots for single day -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Agenda View -->
+    <div class="calendar-view agenda-view" id="view-agenda" role="region" aria-label="Agenda View" style="display: none;">
+      <div class="agenda-toolbar">
+        <input type="search" class="agenda-search-input" id="agenda-search-input" placeholder="Search events by title, description or location..." />
+      </div>
+      <div class="agenda-events-feed" id="agenda-events-feed">
+        <!-- Chronological event stream rendered by UI -->
+      </div>
+    </div>
+  </section>
+</div>

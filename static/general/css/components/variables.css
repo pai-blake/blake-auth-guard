@@ -1,0 +1,100 @@
+/* ==========================================================================
+   AuthGuard — Design System Tokens & Color Schemes
+   ========================================================================== */
+
+:root {
+  /* --- Core Brand --- */
+  --brand-50:  #eef2ff;
+  --brand-100: #e0e7ff;
+  --brand-200: #c7d2fe;
+  --brand-400: #818cf8;
+  --brand-500: #6366f1;
+  --brand-600: #4f46e5;
+  --brand-700: #4338ca;
+
+  /* --- Semantics --- */
+  --color-primary:       var(--brand-600);
+  --color-primary-hover: var(--brand-700);
+  --color-primary-glow:  rgba(99, 102, 241, 0.2);
+  --color-primary-soft:  var(--brand-50);
+
+  --color-error:   #ef4444;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-info:    var(--brand-500);
+
+  /* --- Surface (Light Mode) --- */
+  --bg-page:        #f5f6fa;
+  --bg-card:        #ffffff;
+  --bg-input:       #f8f9fc;
+  --bg-input-focus: #ffffff;
+  --bg-muted:       #f1f3f9;
+
+  /* --- Borders --- */
+  --border-light:  #e8eaf0;
+  --border-medium: #d1d5e0;
+  --border-focus:  var(--brand-500);
+
+  /* --- Text --- */
+  --text-headline:   #111827;
+  --text-body:       #374151;
+  --text-secondary:  #6b7280;
+  --text-muted:      #9ca3af;
+  --text-link:       var(--brand-600);
+  --text-on-primary: #ffffff;
+
+  /* --- Overlay Panel --- */
+  --overlay-bg: linear-gradient(150deg, #4f46e5 0%, #7c3aed 55%, #a855f7 100%);
+
+  /* --- Logo gradient --- */
+  --logo-gradient: linear-gradient(90deg, #6366f1, #a855f7);
+
+  /* --- Typography --- */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* --- Radius --- */
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   16px;
+  --r-xl:   24px;
+  --r-full: 9999px;
+
+  /* --- Shadow --- */
+  --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -1px rgba(0,0,0,0.04);
+  --shadow-card-lg: 0 20px 40px -10px rgba(0,0,0,0.1), 0 0 0 1px var(--border-light);
+  --shadow-input-focus: 0 0 0 3px var(--color-primary-glow);
+  --shadow-btn: 0 2px 4px rgba(79, 70, 229, 0.3);
+  --shadow-btn-hover: 0 4px 12px rgba(79, 70, 229, 0.45);
+}
+
+/* Dark Mode Overrides */
+[data-theme="dark"] {
+  --bg-page:        #0f1117;
+  --bg-card:        #1a1d27;
+  --bg-input:       #222535;
+  --bg-input-focus: #1e2130;
+  --bg-muted:       #1e2130;
+
+  --border-light:  #2d3148;
+  --border-medium: #3a3f60;
+  --border-focus:  var(--brand-400);
+
+  --text-headline:  #f3f4f6;
+  --text-body:      #d1d5db;
+  --text-secondary: #9ca3af;
+  --text-muted:     #6b7280;
+  --text-link:      var(--brand-400);
+
+  --overlay-bg: linear-gradient(150deg, #3730a3 0%, #5b21b6 55%, #7c3aed 100%);
+
+  --color-primary:       var(--brand-400);
+  --color-primary-hover: var(--brand-500);
+  --color-primary-glow:  rgba(129, 140, 248, 0.2);
+  --color-primary-soft:  rgba(99, 102, 241, 0.1);
+
+  --shadow-card: 0 4px 6px -1px rgba(0,0,0,0.3);
+  --shadow-card-lg: 0 20px 40px -10px rgba(0,0,0,0.4), 0 0 0 1px var(--border-light);
+  --shadow-btn: 0 2px 4px rgba(99, 102, 241, 0.4);
+  --shadow-btn-hover: 0 4px 12px rgba(99, 102, 241, 0.55);
+}

@@ -1,0 +1,362 @@
+/* ==========================================================================
+   AuthGuard — Calculator Button Styles
+   ========================================================================== */
+
+/* Calculator Buttons Container */
+.calculator-buttons,
+.calculator-view {
+  display: grid;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+/* Base View - 4 columns */
+.calculator-view {
+  grid-template-columns: repeat(4, 1fr);
+  display: none;
+}
+
+.calculator-view.active,
+#view-basic.active,
+#view-scientific.active,
+#view-advanced.active {
+  display: grid;
+}
+
+/* Basic View */
+.calculator-view.basic-view,
+#view-basic {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Scientific View — 6-column grid to fit all buttons in 5 rows */
+.calculator-view.scientific-view,
+#view-scientific {
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.45rem;
+}
+
+/* Advanced View — 8-column grid for calculus, algebra, trig & numbers */
+.calculator-view.advanced-view,
+#view-advanced {
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.35rem;
+}
+
+/* Compact small buttons for function row labels */
+.calc-btn.sci-sm {
+  padding: 0.65rem 0.4rem;
+  font-size: 0.85rem;
+}
+
+.calc-btn.adv-sm {
+  padding: 0.45rem 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+/* Scientific & Advanced equals */
+.sci-equals {
+  grid-column: auto;
+}
+
+.adv-equals {
+  grid-column: span 3;
+  font-size: 1.15rem;
+}
+
+.zero-btn-adv {
+  grid-column: span 2;
+}
+
+/* Base Button Styling */
+.calc-btn {
+  padding: 0.85rem 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--font-sans);
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  /* no min-height — let grid stretch rows to fill container */
+}
+
+/* Number Buttons */
+.number-btn {
+  background-color: var(--bg-card);
+  color: var(--text-headline);
+  border: 1.5px solid var(--border-light);
+}
+
+.number-btn:hover {
+  background-color: var(--bg-muted);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.number-btn:active {
+  transform: translateY(0);
+}
+
+/* Operator Buttons */
+.operator-btn {
+  background: var(--brand-50, #eef2ff);
+  color: var(--color-primary);
+  border: 1.5px solid var(--brand-200, #c7d2fe);
+  font-size: 1.25rem;
+}
+
+.operator-btn:hover {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--color-primary-glow);
+}
+
+.operator-btn:active {
+  transform: translateY(0);
+}
+
+/* Function Buttons (Scientific) */
+.function-btn {
+  background: rgba(139, 92, 246, 0.08);
+  color: #8b5cf6;
+  border: 1.5px solid rgba(139, 92, 246, 0.25);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.function-btn:hover {
+  background: #8b5cf6;
+  color: #fff;
+  border-color: #8b5cf6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.function-btn:active {
+  transform: translateY(0);
+}
+
+/* Clear Button */
+.clear-btn {
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+}
+
+.clear-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.clear-btn:active {
+  transform: translateY(0);
+}
+
+/* Delete Button */
+.delete-btn {
+  background: rgba(245, 158, 11, 0.08);
+  color: #f59e0b;
+  border: 1.5px solid rgba(245, 158, 11, 0.3);
+}
+
+.delete-btn:hover {
+  background: #f59e0b;
+  color: #fff;
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.delete-btn:active {
+  transform: translateY(0);
+}
+
+/* Decimal Button */
+.decimal-btn {
+  background-color: var(--bg-card);
+  color: var(--text-headline);
+  border: 1.5px solid var(--border-light);
+}
+
+.decimal-btn:hover {
+  background-color: var(--bg-muted);
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Zero Button - spans 2 columns in basic only */
+#view-basic .zero-btn {
+  grid-column: 1 / 3;
+}
+
+/* Scientific zero — single cell */
+#view-scientific .zero-btn {
+  grid-column: auto;
+}
+
+/* Equals Button — basic spans 2 cols, scientific single cell */
+.equals-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: 1.5px solid #059669;
+  font-size: 1.35rem;
+}
+
+#view-basic .equals-btn {
+  grid-column: 3 / 5;
+}
+
+#view-scientific .equals-btn {
+  grid-column: auto;
+  font-size: 1.15rem;
+}
+
+.equals-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.equals-btn:active {
+  transform: translateY(0);
+}
+
+/* Animation for button press */
+@keyframes buttonPress {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(1.5px); }
+  100% { transform: translateY(0); }
+}
+
+.calc-btn:active {
+  animation: buttonPress 0.1s ease-in-out;
+}
+
+/* ── Interactive Calculus & Advanced Dialog ─────────────────────────────── */
+.adv-math-dialog {
+  border: none;
+  border-radius: var(--r-xl, 1rem);
+  padding: 0;
+  background: transparent;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+}
+
+.adv-math-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.adv-dialog-card {
+  background: var(--bg-card, #ffffff);
+  border: 1.5px solid var(--border-light, #e2e8f0);
+  border-radius: var(--r-xl, 1rem);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.adv-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.adv-dialog-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-headline, #0f172a);
+  margin: 0;
+}
+
+.adv-dialog-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #64748b);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.adv-dialog-close:hover {
+  color: #ef4444;
+}
+
+.adv-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.adv-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.adv-form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+}
+
+.adv-form-group input,
+.adv-form-group select {
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--r-md, 0.5rem);
+  border: 1.5px solid var(--border-light, #cbd5e1);
+  background: var(--bg-input, #f8fafc);
+  color: var(--text-headline, #0f172a);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.adv-form-group input:focus,
+.adv-form-group select:focus {
+  border-color: var(--color-primary, #6366f1);
+  box-shadow: 0 0 0 3px var(--color-primary-glow, rgba(99, 102, 241, 0.2));
+}
+
+.adv-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.adv-matrix-grid.grid-3x3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.adv-matrix-grid input {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.adv-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.adv-dialog-footer .calc-btn {
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+}

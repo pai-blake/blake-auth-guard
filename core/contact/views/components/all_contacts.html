@@ -1,0 +1,66 @@
+<!-- ───────────────────────────────────────────────────────────────────
+     VIEW 2: ALL CONTACT
+     ─────────────────────────────────────────────────────────────────── -->
+<section class="ct-view" id="ct-view-all" role="tabpanel" aria-labelledby="tab-all">
+  <header class="ct-view-header">
+    <div>
+      <h2 class="ct-view-heading">All Contacts</h2>
+      <p class="ct-view-subheading">Saved address book</p>
+    </div>
+    <div class="ct-header-actions">
+      <button type="button" class="ct-btn ct-btn--primary" id="btn-goto-search">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Find Contacts</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Filter & Sort Toolbar -->
+  <div class="ct-toolbar">
+    <div class="ct-filter-search">
+      <span class="ct-search-icon">
+        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <input type="text" id="ct-filter-contacts-input" class="ct-input ct-input--sm"
+             placeholder="Filter contacts...">
+    </div>
+    <div class="ct-sort-wrap">
+      <label for="ct-sort-select" class="ct-sort-label">Sort:</label>
+      <select id="ct-sort-select" class="ct-select">
+        <option value="recent">Recent</option>
+        <option value="name-asc">Name (A–Z)</option>
+        <option value="name-desc">Name (Z–A)</option>
+        <option value="online">Online First</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Contacts Grid -->
+  <div class="ct-results-container" id="ct-all-contacts-area">
+    <div class="ct-cards-grid" id="ct-all-contacts-grid">
+      <!-- Dynamically populated contact cards -->
+    </div>
+
+    <div class="ct-empty-state" id="ct-all-empty-state" style="display: none;">
+      <div class="ct-empty-icon-wrap">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
+      <h3 class="ct-empty-title">No Contacts Saved</h3>
+      <p class="ct-empty-text">Search the directory to add contacts.</p>
+      <button type="button" class="ct-btn ct-btn--primary" id="btn-empty-goto-search">
+        <span>Find Contacts</span>
+      </button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home — AuthGuard</title>
+  <meta name="description"
+    content="AuthGuard Home Dashboard — centralized access to computing and authentication tools.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  
+  <!-- Brand Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='general/favicon.svg') }}">
+  <link rel="alternate icon" href="{{ url_for('static', filename='general/favicon.svg') }}">
+
+  <!-- Design Tokens & CSS Variables -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='general/css/components/variables.css') }}?v=2026082802">
+
+  <!-- General Module CSS Master -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='general/css/style.css') }}?v=2026082802">
+  
+  <!-- Home Module CSS Master -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='home/css/style.css') }}?v=2026082802">
+</head>
+
+<body>
+
+  <!-- Home Header (Shared General Header with Home branding & Theme Switcher) -->
+  {% include "home/views/components/header.html" %}
+
+  <!-- Main Container -->
+  <main class="main-container">
+    {% include "home/views/pages/dashboard.html" %}
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- General System Scripts -->
+  <script src="{{ url_for('static', filename='general/js/loader.js') }}?v=2026082802"></script>
+  <script src="{{ url_for('static', filename='general/js/storage.js') }}?v=2026082802"></script>
+  <script src="{{ url_for('static', filename='general/js/theme.js') }}?v=2026082802"></script>
+  <script src="{{ url_for('static', filename='general/js/toast.js') }}?v=2026082802"></script>
+
+  <!-- Server-provided boot state -->
+  <script>
+    window.__SERVER_USER__ = {{ server_user | default(user) | tojson }};
+    window.__USER_SESSION__ = {{ (user is not none) | tojson }};
+
+    // Logout handling
+    document.addEventListener('click', function (event) {
+      var btn = event.target.closest('#btn-header-logout, .btn-logout');
+      if (btn) {
+        try { navigator.sendBeacon('{{ url_for("router.logout") }}'); } catch (e) {}
+      }
+    }, true);
+
+    // Toast notification for notice
+    var notice = {{ notice | default('') | tojson }};
+    if (notice && window.showToast) {
+      var msgs = {
+        'direct_url_blocked':            'Open Calculator via the launch card below.',
+        'direct_url_blocked_calculator': 'Open Calculator via the launch card below.',
+        'direct_url_blocked_template':   'Open Template via the launch card below.',
+        'direct_url_blocked_contact':    'Open Contact via the launch card below.',
+      };
+      var msg = msgs[notice] || 'Direct URL access is restricted.';
+      window.showToast(msg, 'info', 4000);
+    }
+  </script>
+
+  <!-- Home Sub-Components Scripts -->
+  <script src="{{ url_for('static', filename='home/js/components/profile.js') }}?v=2026082802"></script>
+  <script src="{{ url_for('static', filename='home/js/components/apps.js') }}?v=2026082802"></script>
+  <script src="{{ url_for('static', filename='home/js/components/modals.js') }}?v=2026082802"></script>
+  <script src="{{ url_for('static', filename='home/js/pages/dashboard.js') }}?v=2026082802"></script>
+
+  <!-- Home Module Master Script -->
+  <script src="{{ url_for('static', filename='home/js/home.js') }}?v=2026082802"></script>
+
+</body>
+
+</html>

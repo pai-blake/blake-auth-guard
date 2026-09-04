@@ -1,0 +1,178 @@
+<!-- ============================================================
+     Template Module — Main Page View (Two-Column Layout)
+     core/template/views/pages/template.html
+     ============================================================ -->
+
+<div class="tpl-layout" id="template-layout">
+
+  <!-- ════════════════════════════════════════════════════════════
+       LEFT PANEL — Brand, Vertical Nav, File Map
+       ════════════════════════════════════════════════════════════ -->
+  <aside class="tpl-left-panel">
+
+    <!-- Brand block -->
+    <div class="tpl-brand">
+      <span class="tpl-badge">🛠️ Developer Backbone</span>
+      <h1 class="tpl-title">Template</h1>
+      <p class="tpl-subtitle">
+        A fully-wired backbone module ready to customize and extend.
+      </p>
+    </div>
+
+    <!-- Vertical navigation -->
+    <nav class="tpl-nav" role="tablist" aria-label="Template navigation">
+      <button class="tpl-nav-btn active"
+              id="tab-overview"
+              data-route="/overview"
+              role="tab"
+              aria-selected="true"
+              aria-controls="tpl-view-overview">
+        <span class="tpl-nav-icon">📋</span> Overview
+      </button>
+      <button class="tpl-nav-btn"
+              id="tab-docs"
+              data-route="/docs"
+              role="tab"
+              aria-selected="false"
+              aria-controls="tpl-view-docs">
+        <span class="tpl-nav-icon">📖</span> Dev Guide
+      </button>
+      <button class="tpl-nav-btn"
+              id="tab-globals"
+              data-route="/globals"
+              role="tab"
+              aria-selected="false"
+              aria-controls="tpl-view-globals">
+        <span class="tpl-nav-icon">🔗</span> Globals
+      </button>
+    </nav>
+
+    <!-- File map at the bottom -->
+    <div class="tpl-file-map">
+      <code>core/template/shell.html</code><br>
+      <code>core/template/views/pages/</code><br>
+      <code>static/template/css/style.css</code><br>
+      <code>static/template/js/components/core.js</code><br>
+      <code>static/template/js/components/ui.js</code><br>
+      <code>static/template/js/components/router.js</code><br>
+      <code>static/template/js/pages/main.js</code><br>
+      <code>static/template/js/components/app.js</code>
+    </div>
+
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════════
+       RIGHT PANEL — Content Views
+       ════════════════════════════════════════════════════════════ -->
+  <main class="tpl-right-panel">
+
+    <!-- ── View: Overview ──────────────────────────────────────── -->
+    <section class="tpl-view active"
+             id="tpl-view-overview"
+             role="tabpanel"
+             aria-labelledby="tab-overview">
+
+      <h2 class="tpl-view-heading">📋 Overview — Interactive Demo</h2>
+
+      <!-- Counter Demo -->
+      <div class="tpl-demo-box">
+        <div class="tpl-counter" id="template-counter-val">0</div>
+        <p class="tpl-hint">
+          Click the button — it calls <code>TemplateCore.incrementCounter()</code>
+          and updates this display via the state change event.
+        </p>
+        <button class="tpl-action-btn" id="template-demo-btn" type="button">
+          ⚡ Trigger Action
+        </button>
+      </div>
+
+      <!-- State output -->
+      <div class="tpl-info-card">
+        <strong>🧠 How it works</strong>
+        <code>TemplateCore</code> holds state and emits events.<br>
+        <code>TemplateUI</code> listens and updates the DOM.<br>
+        <code>TemplateRouter</code> drives tab switching via <code>data-route</code> attributes.<br>
+        <code>TemplateApp</code> bootstraps all three on DOMContentLoaded.
+      </div>
+
+    </section>
+
+    <!-- ── View: Dev Guide ─────────────────────────────────────── -->
+    <section class="tpl-view"
+             id="tpl-view-docs"
+             role="tabpanel"
+             aria-labelledby="tab-docs">
+
+      <h2 class="tpl-view-heading">📖 Developer Guide</h2>
+
+      <div class="tpl-info-card">
+        <strong>1. Register a new route</strong>
+        Open <code>static/template/js/pages/main.js</code> and call:<br>
+        <code>TemplateRouter.register('/myview', { viewId: 'tpl-view-myview', title: 'My View' })</code>
+      </div>
+
+      <div class="tpl-info-card">
+        <strong>2. Add a nav button</strong>
+        In this file, add a button with <code>data-route="/myview"</code>
+        and class <code>tpl-nav-btn</code> inside the <code>.tpl-nav</code> element.
+      </div>
+
+      <div class="tpl-info-card">
+        <strong>3. Add a view section</strong>
+        Add <code>&lt;section class="tpl-view" id="tpl-view-myview"&gt;</code>
+        inside <code>.tpl-right-panel</code> below the existing views.
+      </div>
+
+      <div class="tpl-info-card">
+        <strong>4. Update the Blueprint</strong>
+        In <code>core/template/__init__.py</code>, add Flask routes for any
+        backend endpoints your new view needs.
+      </div>
+
+      <div class="tpl-info-card">
+        <strong>5. Add styles</strong>
+        Create a new <code>.css</code> file in <code>static/template/css/components/</code>
+        and import it at the bottom of <code>static/template/css/style.css</code>.
+      </div>
+
+    </section>
+
+    <!-- ── View: Globals ───────────────────────────────────────── -->
+    <section class="tpl-view"
+             id="tpl-view-globals"
+             role="tabpanel"
+             aria-labelledby="tab-globals">
+
+      <h2 class="tpl-view-heading">🔗 Global APIs Available in Every Module</h2>
+
+      <div class="tpl-info-card">
+        <strong>User & Auth</strong>
+        <code>window.__SERVER_USER__</code> — Authenticated user from Flask session<br>
+        <code>window.__USER_PERMISSIONS__</code> — User permissions array<br>
+        <code>window.__USER_SESSION__</code> — Boolean session state<br>
+        <code>window.__SERVER_ROUTE__</code> — Current server route string<br>
+        <code>window.hasPermission(perm)</code> — Permission guard helper<br>
+        <code>window.DB.getCurrentUser()</code> — Client-side user state
+      </div>
+
+      <div class="tpl-info-card">
+        <strong>UI Utilities</strong>
+        <code>window.showToast(msg, type, duration)</code> — Toast notifications<br>
+        <code>window.ThemeManager</code> — Dark/light theme controller<br>
+        <code>window.Loader</code> — Page loading state manager
+      </div>
+
+      <div class="tpl-info-card">
+        <strong>Template Module Globals (this core)</strong>
+        <code>window.TemplateCore</code> — State & event bus<br>
+        <code>window.TemplateUI</code> — DOM helpers & view switcher<br>
+        <code>window.TemplateRouter</code> — In-page hash routing<br>
+        <code>window.TemplateMainPage</code> — Page-level logic<br>
+        <code>window.TemplateApp</code> — Bootstrap controller
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

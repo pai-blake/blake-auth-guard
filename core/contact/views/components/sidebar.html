@@ -1,0 +1,87 @@
+<!-- =====================================================================
+     LEFT PANEL — Brand, Navigation Tabs, Custom Pages, Counter Footer
+     ===================================================================== -->
+<aside class="ct-left-panel">
+  <div class="ct-brand">
+    <h1 class="ct-title">Contacts</h1>
+    <p class="ct-subtitle">Directory & Connections</p>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <nav class="ct-nav" role="tablist" id="ct-nav-list">
+    <!-- 1. Search -->
+    <button class="ct-nav-btn active" data-route="/search" id="tab-search" role="tab" aria-controls="ct-view-search">
+      <span class="ct-nav-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <span class="ct-nav-label">Search</span>
+    </button>
+
+    <!-- 2. All Contact -->
+    <button class="ct-nav-btn" data-route="/all" id="tab-all" role="tab" aria-controls="ct-view-all">
+      <span class="ct-nav-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </span>
+      <span class="ct-nav-label">All Contacts</span>
+      <span class="ct-nav-badge" id="badge-all-count">0</span>
+    </button>
+
+    <!-- 3. Favourite -->
+    <button class="ct-nav-btn" data-route="/favourite" id="tab-favourite" role="tab" aria-controls="ct-view-favourite">
+      <span class="ct-nav-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </span>
+      <span class="ct-nav-label">Favourites</span>
+      <span class="ct-nav-badge" id="badge-fav-count">0</span>
+    </button>
+
+    <!-- Dynamic Custom Pages Tabs Container -->
+    <div id="ct-custom-tabs-container" class="ct-custom-tabs-container"></div>
+
+    <!-- 4. Edit / Manage Pages -->
+    <button class="ct-nav-btn ct-nav-btn--edit" data-route="/edit" id="tab-edit" role="tab" aria-controls="ct-view-edit">
+      <span class="ct-nav-icon">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"></line>
+          <line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line>
+          <line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line>
+          <line x1="9" y1="8" x2="15" y2="8"></line>
+          <line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      </span>
+      <span class="ct-nav-label">Manage Pages</span>
+    </button>
+  </nav>
+
+  <!-- Bottom Footer / Page Counter -->
+  <div class="ct-footer">
+    <div class="ct-page-counter" id="ct-page-counter">
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+        <polyline points="14 2 14 8 20 8"></polyline>
+        <line x1="16" y1="13" x2="8" y2="13"></line>
+        <line x1="16" y1="17" x2="8" y2="17"></line>
+        <polyline points="10 9 9 9 8 9"></polyline>
+      </svg>
+      <span class="ct-counter-text" id="ct-counter-text">3 / 6 Pages</span>
+    </div>
+    <div class="ct-footer-meta">
+      <span class="ct-status-dot online"></span>
+      <span class="ct-footer-user" id="ct-current-user-display">Connected</span>
+    </div>
+  </div>
+</aside>

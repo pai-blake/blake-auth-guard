@@ -1,0 +1,157 @@
+/* ==========================================================================
+   AuthGuard — Dedicated Vertical Header Styles for Auth Page (Original Design)
+   ========================================================================== */
+
+.app-header {
+  position: static;
+  pointer-events: none;
+}
+
+/* Floating Vertical Brand on Left */
+.brand {
+  position: fixed;
+  top: 1.75rem;
+  left: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 100;
+  pointer-events: auto;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.brand:hover {
+  transform: translateY(-2px);
+}
+
+.brand-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-lg, 14px);
+  background: var(--overlay-bg, linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+  flex-shrink: 0;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.brand:hover .brand-icon {
+  box-shadow: 0 10px 28px rgba(99, 102, 241, 0.55);
+  transform: scale(1.04);
+}
+
+.brand-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.brand-name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-sans, 'Plus Jakarta Sans', sans-serif);
+  user-select: none;
+}
+
+.brand-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.brand-group span {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-headline);
+  transition: color 0.2s;
+}
+
+.brand-group--suffix span {
+  background: var(--logo-gradient, linear-gradient(135deg, #6366f1 0%, #a855f7 100%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Floating Theme Switcher on Right */
+.header-right {
+  position: fixed;
+  top: 1.75rem;
+  right: 1.75rem;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.theme-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-md, 12px);
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-card);
+}
+
+.theme-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
+  transform: translateY(-1px);
+}
+
+.theme-icon {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 768px) {
+  .brand {
+    top: 1rem;
+    left: 1rem;
+    flex-direction: row;
+    gap: 0.6rem;
+  }
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .brand-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .brand-name {
+    flex-direction: row;
+    gap: 0.25rem;
+  }
+  .brand-group {
+    flex-direction: row;
+    gap: 0;
+  }
+  .brand-group span {
+    font-size: 1.1rem;
+  }
+  .header-right {
+    top: 1rem;
+    right: 1rem;
+  }
+  .theme-btn {
+    width: 38px;
+    height: 38px;
+  }
+}

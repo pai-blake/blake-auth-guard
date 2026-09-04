@@ -33,10 +33,46 @@ _db_lock = threading.Lock()
 
 try:
     psycopg2 = importlib.import_module('psycopg2')
-    RealDictCursor = importlib.import_module('psycopg2.extras').RealDictCursor
+    _psycopg2_cursor = importlib.import_module('psycopg2.extensions').cursor
+
+    class DualRow(dict):
+        """Row object that mimics sqlite3.Row for psycopg2:
+        Supports access by column name (r['col']),
+        access by integer index (r[0]),
+        iteration over values (x, y = r),
+        and standard dict methods (.get(), .keys(), etc.).
+        """
+        def __init__(self, cursor, row):
+            self._fields = [d[0] for d in cursor.description]
+            self._values = list(row)
+            super().__init__(zip(self._fields, self._values))
+
+        def __getitem__(self, key):
+            if isinstance(key, int):
+                return self._values[key]
+            return super().__getitem__(key)
+
+        def __iter__(self):
+            return iter(self._values)
+
+    class DualCursor(_psycopg2_cursor):
+        def fetchone(self):
+            row = super().fetchone()
+            return DualRow(self, row) if row is not None else None
+
+        def fetchall(self):
+            rows = super().fetchall()
+            return [DualRow(self, row) for row in rows]
+
+        def fetchmany(self, size=None):
+            rows = super().fetchmany(size)
+            return [DualRow(self, row) for row in rows]
+
     PSYCOPG2_AVAILABLE = True
 except ImportError:
     PSYCOPG2_AVAILABLE = False
+    DualCursor = None
+    DualRow = None
 
 
 # ==========================================================================
@@ -72,15 +108,26 @@ def verify_password(password: str, stored_hash: str) -> bool:
 # ==========================================================================
 # Connection Probing & Discovery
 # ==========================================================================
+def _normalize_db_url(url: str) -> str:
+    """Normalize database connection URLs for psycopg2.
+    - Converts postgres:// to postgresql://
+    - Direct connection for Neon (-pooler removal for DDL stability)
+    """
+    if not url:
+        return ''
+    if url.startswith('postgres://'):
+        url = url.replace('postgres://', 'postgresql://', 1)
+    if '-pooler.' in url and '.neon.tech' in url:
+        url = url.replace('-pooler.', '.')
+    return url
+
+
 def _test_postgresql():
     """Attempts to establish a test connection to PostgreSQL."""
     if not PSYCOPG2_AVAILABLE:
         return False
 
-    db_url = os.getenv('DATABASE_URL', '')
-    # Render (and some cloud providers) use "postgres://" but psycopg2 requires "postgresql://"
-    if db_url.startswith('postgres://'):
-        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    db_url = _normalize_db_url(os.getenv('DATABASE_URL', ''))
 
     pg_host = os.getenv('PG_HOST') or os.getenv('POSTGRES_HOST')
     pg_port = os.getenv('PG_PORT') or os.getenv('POSTGRES_PORT') or '5432'
@@ -93,7 +140,7 @@ def _test_postgresql():
 
     try:
         if db_url:
-            conn = psycopg2.connect(db_url, connect_timeout=5)
+            conn = psycopg2.connect(db_url)
         else:
             conn = psycopg2.connect(
                 host=pg_host or 'localhost',
@@ -101,7 +148,7 @@ def _test_postgresql():
                 user=pg_user or 'postgres',
                 password=pg_pass or '',
                 dbname=pg_name,
-                connect_timeout=5
+                connect_timeout=8
             )
         conn.close()
         return True
@@ -114,19 +161,17 @@ def get_connection():
     """Returns a new connection for the active database engine."""
     global DB_ENGINE
     if DB_ENGINE == 'postgresql':
-        db_url = os.getenv('DATABASE_URL', '')
-        # Normalize Render's postgres:// to psycopg2-compatible postgresql://
-        if db_url.startswith('postgres://'):
-            db_url = db_url.replace('postgres://', 'postgresql://', 1)
+        db_url = _normalize_db_url(os.getenv('DATABASE_URL', ''))
+        cursor_cls = DualCursor if DualCursor else None
         if db_url:
-            return psycopg2.connect(db_url, cursor_factory=RealDictCursor)
+            return psycopg2.connect(db_url, cursor_factory=cursor_cls)
         return psycopg2.connect(
             host=os.getenv('PG_HOST') or 'localhost',
             port=int(os.getenv('PG_PORT') or '5432'),
             user=os.getenv('PG_USER') or 'postgres',
             password=os.getenv('PG_PASSWORD') or '',
             dbname=os.getenv('PG_DATABASE') or 'authguard',
-            cursor_factory=RealDictCursor
+            cursor_factory=cursor_cls
         )
     else:
         conn = sqlite3.connect(str(SQLITE_DB_PATH), check_same_thread=False)
@@ -313,6 +358,8 @@ def init_db():
                         email VARCHAR(255) UNIQUE NOT NULL,
                         password_hash VARCHAR(255),
                         verified BOOLEAN DEFAULT FALSE,
+                        username VARCHAR(255),
+                        avatar TEXT,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     );
                 """)
@@ -334,6 +381,8 @@ def init_db():
                         email TEXT UNIQUE NOT NULL,
                         password_hash TEXT,
                         verified INTEGER DEFAULT 0,
+                        username TEXT,
+                        avatar TEXT,
                         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                     );
                 """)
@@ -347,14 +396,20 @@ def init_db():
                         expires_at REAL NOT NULL
                     );
                 """)
-                # NOTE: the legacy flat `messages` table is no longer created.
-                # Chat content lives in conversations / chat_messages /
-                # media_files / call_logs (see below). Existing legacy tables
-                # are migrated once by _migrate_legacy_messages().
+
+            # Ensure username + avatar columns exist for existing databases
+            for column in ('username', 'avatar'):
+                try:
+                    if DB_ENGINE == 'postgresql':
+                        cursor.execute(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {column} TEXT;")
+                    else:
+                        cursor.execute(f"ALTER TABLE users ADD COLUMN {column} TEXT;")
+                except Exception:
+                    pass
+
+            conn.commit()
 
             # ── Dual User Tables: Private & Public ─────────────────────────
-            # 1. Private table (for account owner only): private_key, public_key, email, passwords, create_date, update_date
-            # 2. Public table (for social communication): private_key, public_key, name, username, user_profile_photo
             if DB_ENGINE == 'postgresql':
                 cursor.execute("""
                     CREATE TABLE IF NOT EXISTS users_private (
@@ -398,20 +453,11 @@ def init_db():
                     );
                 """)
 
+            conn.commit()
+
             # Backfill / sync users_private & users_public from users table
             _sync_dual_user_tables(cursor)
-
-            # Ensure username + avatar columns exist for user settings.
-            # (username uniqueness is enforced in code, not by a constraint,
-            #  because SQLite cannot add a UNIQUE column via ALTER TABLE.)
-            for column in ('username', 'avatar'):
-                try:
-                    if DB_ENGINE == 'postgresql':
-                        cursor.execute(f"ALTER TABLE users ADD COLUMN IF NOT EXISTS {column} TEXT;")
-                    else:
-                        cursor.execute(f"ALTER TABLE users ADD COLUMN {column} TEXT;")
-                except Exception:
-                    pass
+            conn.commit()
 
             # ── User-content schema ────────────────────────────────────────
             # Personal data lives in `users`. Everything users SEND to each
@@ -432,6 +478,8 @@ def init_db():
                     PRIMARY KEY (conversation_id, user_id)
                 );
             """.format(ts='TIMESTAMP' if DB_ENGINE == 'postgresql' else 'DATETIME'))
+            bool_def = 'BOOLEAN DEFAULT FALSE' if DB_ENGINE == 'postgresql' else 'INTEGER DEFAULT 0'
+
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS chat_messages (
                     id {pk},
@@ -439,12 +487,12 @@ def init_db():
                     sender_id VARCHAR(64) NOT NULL,
                     text TEXT NOT NULL,
                     status VARCHAR(32) DEFAULT 'sent',
-                    is_read {bool} DEFAULT 0,
+                    is_read {bool_def},
                     created_at {ts} DEFAULT CURRENT_TIMESTAMP
                 );
             """.format(pk='SERIAL PRIMARY KEY' if DB_ENGINE == 'postgresql' else 'INTEGER PRIMARY KEY AUTOINCREMENT',
                        ts='TIMESTAMP' if DB_ENGINE == 'postgresql' else 'DATETIME',
-                       bool='BOOLEAN' if DB_ENGINE == 'postgresql' else 'INTEGER'))
+                       bool_def=bool_def))
             # Media (photos / files / VIDEOS). Video payloads are purged after
             # MEDIA_VIDEO_RETENTION_DAYS — only the name + log row remain.
             cursor.execute("""
@@ -459,13 +507,13 @@ def init_db():
                     file_data TEXT,
                     file_size INTEGER,
                     expires_at {dbl},
-                    media_expired {bool} DEFAULT 0,
+                    media_expired {bool_def},
                     created_at {ts} DEFAULT CURRENT_TIMESTAMP
                 );
             """.format(pk='SERIAL PRIMARY KEY' if DB_ENGINE == 'postgresql' else 'INTEGER PRIMARY KEY AUTOINCREMENT',
                        ts='TIMESTAMP' if DB_ENGINE == 'postgresql' else 'DATETIME',
                        dbl='DOUBLE PRECISION' if DB_ENGINE == 'postgresql' else 'REAL',
-                       bool='BOOLEAN' if DB_ENGINE == 'postgresql' else 'INTEGER'))
+                       bool_def=bool_def))
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS call_logs (
                     id {pk},
@@ -498,15 +546,15 @@ def init_db():
                 CREATE TABLE IF NOT EXISTS contact_preferences (
                     user_id VARCHAR(64) NOT NULL,
                     contact_id VARCHAR(64) NOT NULL,
-                    archived {bool} DEFAULT 0,
-                    pinned {bool} DEFAULT 0,
+                    archived {bool_def},
+                    pinned {bool_def},
                     pinned_at {dbl},
                     muted_until {dbl},
                     PRIMARY KEY (user_id, contact_id)
                 );
             """.format(ts='TIMESTAMP' if DB_ENGINE == 'postgresql' else 'DATETIME',
                        dbl='DOUBLE PRECISION' if DB_ENGINE == 'postgresql' else 'REAL',
-                       bool='BOOLEAN' if DB_ENGINE == 'postgresql' else 'INTEGER'))
+                       bool_def=bool_def))
 
             # Per-user hidden content ("clear history for me"):
             # kind = 'message' | 'media' | 'call', item_id = row id

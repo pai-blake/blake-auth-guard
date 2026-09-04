@@ -56,5 +56,14 @@
         if (calc) calc.calculate();
       });
     });
+
+    // Function buttons (e.g. sqrt)
+    basicContainer.querySelectorAll('[data-func]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const calc = getCalc();
+        const func = e.currentTarget.dataset.func;
+        if (calc && func) calc.appendFunction(func);
+      });
+    });
   });
 })();

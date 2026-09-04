@@ -299,6 +299,9 @@
       if (this.isEvaluated) {
         if (symbol === '²' || symbol === '³' || symbol === '⁻¹' || symbol === '!' || symbol === '%') {
           this.expression = String(this.lastResult) + symbol;
+        } else if (symbol === '√(' || symbol === '∛(') {
+          // If continuing from evaluated result: wrap it, e.g. √(16)
+          this.expression = symbol + String(this.lastResult) + ')';
         } else {
           this.expression = symbol;
         }
@@ -307,6 +310,15 @@
       } else {
         if (this.expression === '0') {
           this.expression = symbol;
+        } else if ((symbol === '√(' || symbol === '∛(') && /[\d.)]$/.test(this.expression)) {
+          // If preceded by a number or closing paren, wrap the preceding operand e.g. 9 -> √(9)
+          const match = this.expression.match(/(\([^()]*\)|[\d.]+)$/);
+          if (match) {
+            const prefix = this.expression.slice(0, match.index);
+            this.expression = prefix + symbol + match[0] + ')';
+          } else {
+            this.expression += symbol;
+          }
         } else {
           this.expression += symbol;
         }
@@ -454,38 +466,44 @@
         // 4. Factorial: e.g. 5! -> factorial(5)
         code = code.replace(/(\d+|\([^)]+\))!/g, 'factorial($1)');
 
-        // 5. Roots: √(x) -> Math.sqrt(x), ∛(x) -> Math.cbrt(x), sqrt(x), bare √9
+        // 5. Roots:
+        // a) Postfix roots (e.g. "9√" or "(4+5)√" when not followed by digits or opening paren)
         code = code
-          .replace(/√\(/g, 'Math.sqrt(')
-          .replace(/∛\(/g, 'Math.cbrt(')
-          .replace(/\bsqrt\(/gi, 'Math.sqrt(')
-          .replace(/\bcbrt\(/gi, 'Math.cbrt(')
-          .replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)')
-          .replace(/∛(\d+(\.\d+)?)/g, 'Math.cbrt($1)');
+          .replace(/(\d+(\.\d+)?|\([^)]+\))\s*√(?!\s*[\d(])/g, 'Math.sqrt($1)')
+          .replace(/(\d+(\.\d+)?|\([^)]+\))\s*∛(?!\s*[\d(])/g, 'Math.cbrt($1)');
+        // b) Prefix roots: √(x), √x, sqrt(x)
+        code = code
+          .replace(/√\s*\(/g, 'Math.sqrt(')
+          .replace(/∛\s*\(/g, 'Math.cbrt(')
+          .replace(/√\s*(\d+(\.\d+)?)/g, 'Math.sqrt($1)')
+          .replace(/∛\s*(\d+(\.\d+)?)/g, 'Math.cbrt($1)')
+          .replace(/(?<!Math\.)\bsqrt\s*\(/gi, 'Math.sqrt(')
+          .replace(/(?<!Math\.)\bcbrt\s*\(/gi, 'Math.cbrt(');
 
-        // 6. Absolute value: |x| -> Math.abs(x)
+        // 6. Implicit multiplication: 2(3), (2)(3), 2Math.sqrt(9), 2sin(30), (2)cos(60)
+        code = code
+          .replace(/(\d)\s*(\()/g, '$1*$2')
+          .replace(/(\))\s*(\d)/g, '$1*$2')
+          .replace(/(\))\s*(\()/g, '$1*$2')
+          .replace(/(\d)\s*(\(Math\.PI\)|\(Math\.E\))/g, '$1*$2')
+          .replace(/(\(Math\.PI\)|\(Math\.E\))\s*(\d)/g, '$1*$2')
+          .replace(/(\d)\s*([a-zA-Zπ]|Math\.)/g, '$1*$2')
+          .replace(/(\))\s*([a-zA-Zπ]|Math\.)/g, '$1*$2');
+
+        // 7. Absolute value: |x| -> Math.abs(x)
         code = code.replace(/\|([^|]+)\|/g, 'Math.abs($1)');
 
-        // 7. Logarithms & Exponential
+        // 8. Logarithms & Exponential
         code = code
           .replace(/log₂\(/g, 'Math.log2(')
           .replace(/log\(/g, 'Math.log10(')
           .replace(/ln\(/g, 'Math.log(')
           .replace(/e\^\(/g, 'Math.exp(');
 
-        // 8. Hyperbolic — handled in step 9 below alongside trig
-
         // 9. Trigonometry (handling RAD vs DEG)
         // NOTE: We replace only the function-name prefix (e.g. sin( -> Math.sin() 
         // and inject angle-conversion multipliers inside the argument.
-        // We do NOT use [^)]+ regex to capture arguments because it breaks on
-        // nested expressions like sin(cos(x)). JavaScript's own evaluator handles
-        // the parenthesis matching after the prefix substitution.
         if (this.angleMode === 'DEG') {
-          // DEG mode: inject degree-to-radian conversion inside each trig call.
-          // Wrap the trig call with a multiplier applied to the raw argument.
-          // Strategy: replace "sin(" with a DEG-aware wrapper using a helper.
-          // We use a named helper so JS handles the paren matching correctly.
           code = code
             .replace(/\basin\(/g, '__asin_deg(')
             .replace(/\bacos\(/g, '__acos_deg(')
@@ -497,7 +515,6 @@
             .replace(/\bcos\(/g, '__cos_deg(')
             .replace(/\btan\(/g, '__tan_deg(');
         } else {
-          // RAD mode: plain Math.* prefix substitution; no conversion needed.
           code = code
             .replace(/\basin\(/g, 'Math.asin(')
             .replace(/\bacos\(/g, 'Math.acos(')
@@ -517,16 +534,6 @@
           .replace(/(\d+(\.\d+)?|\([^)]+\))\s+mod\s+(\d+(\.\d+)?|\([^)]+\))/g, '($1 % $3)')
           .replace(/(\d+(\.\d+)?|\([^)]+\))\s+P\s+(\d+(\.\d+)?|\([^)]+\))/g, 'nPr($1, $3)')
           .replace(/(\d+(\.\d+)?|\([^)]+\))\s+C\s+(\d+(\.\d+)?|\([^)]+\))/g, 'nCr($1, $3)');
-
-        // 11. Implicit multiplication: 2(3) -> 2*(3), (2)(3) -> (2)*(3), 2π -> 2*π, 2Math.sqrt -> 2*Math.sqrt
-        code = code
-          .replace(/(\d)(\()/g, '$1*$2')
-          .replace(/(\))(\d)/g, '$1*$2')
-          .replace(/(\))(\()/g, '$1*$2')
-          .replace(/(\d)(\(Math\.PI\)|\(Math\.E\))/g, '$1*$2')
-          .replace(/(\(Math\.PI\)|\(Math\.E\))(\d)/g, '$1*$2')
-          .replace(/(\d)(Math\.[a-zA-Z]+)/g, '$1*$2')
-          .replace(/(\))(Math\.[a-zA-Z]+)/g, '$1*$2');
 
         // Evaluate inside a safe sandbox with math helpers in scope.
         // DEG-mode trig wrappers (__sin_deg, etc.) are injected as extra args.
@@ -639,9 +646,15 @@
         return;
       }
 
+      if (end - start > 100000) {
+        this.showToast('Summation range too large (max 100,000 steps)', 'error');
+        return;
+      }
+
       let total = 0;
       for (let n = start; n <= end; n++) {
-        const subbed = formula.replace(/\bn\b/gi, `(${n})`);
+        // Support n, x, i, or k as index variable
+        const subbed = formula.replace(/\b(n|x|i|k)\b/gi, `(${n})`);
         const val = this.evaluateFormula(subbed);
         if (val === null) {
           this.showToast('Error in summation formula', 'error');
@@ -718,7 +731,12 @@
 
     formatResult(num) {
       if (isNaN(num) || !isFinite(num)) return 'Error';
-      const rounded = parseFloat(Number(num).toFixed(10));
+      const n = Number(num);
+      // Clean scientific notation for very large or tiny numbers
+      if (Math.abs(n) >= 1e14 || (Math.abs(n) < 1e-7 && n !== 0)) {
+        return n.toPrecision(10).replace(/\.?0+e/, 'e');
+      }
+      const rounded = parseFloat(n.toFixed(10));
       return String(rounded);
     }
 

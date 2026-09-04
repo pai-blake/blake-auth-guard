@@ -454,10 +454,14 @@
         // 4. Factorial: e.g. 5! -> factorial(5)
         code = code.replace(/(\d+|\([^)]+\))!/g, 'factorial($1)');
 
-        // 5. Roots: √(x) -> Math.sqrt(x), ∛(x) -> Math.cbrt(x)
+        // 5. Roots: √(x) -> Math.sqrt(x), ∛(x) -> Math.cbrt(x), sqrt(x), bare √9
         code = code
           .replace(/√\(/g, 'Math.sqrt(')
-          .replace(/∛\(/g, 'Math.cbrt(');
+          .replace(/∛\(/g, 'Math.cbrt(')
+          .replace(/\bsqrt\(/gi, 'Math.sqrt(')
+          .replace(/\bcbrt\(/gi, 'Math.cbrt(')
+          .replace(/√(\d+(\.\d+)?)/g, 'Math.sqrt($1)')
+          .replace(/∛(\d+(\.\d+)?)/g, 'Math.cbrt($1)');
 
         // 6. Absolute value: |x| -> Math.abs(x)
         code = code.replace(/\|([^|]+)\|/g, 'Math.abs($1)');
@@ -469,27 +473,42 @@
           .replace(/ln\(/g, 'Math.log(')
           .replace(/e\^\(/g, 'Math.exp(');
 
-        // 8. Hyperbolic
-        code = code
-          .replace(/sinh\(/g, 'Math.sinh(')
-          .replace(/cosh\(/g, 'Math.cosh(')
-          .replace(/tanh\(/g, 'Math.tanh(');
+        // 8. Hyperbolic — handled in step 9 below alongside trig
 
         // 9. Trigonometry (handling RAD vs DEG)
-        const toRad = this.angleMode === 'DEG' ? '*(Math.PI/180)' : '';
-        const fromRad = this.angleMode === 'DEG' ? '*(180/Math.PI)' : '';
-
-        // Standard trig
-        code = code
-          .replace(/sin\(([^)]+)\)/g, `Math.sin(($1)${toRad})`)
-          .replace(/cos\(([^)]+)\)/g, `Math.cos(($1)${toRad})`)
-          .replace(/tan\(([^)]+)\)/g, `Math.tan(($1)${toRad})`);
-
-        // Inverse trig
-        code = code
-          .replace(/asin\(([^)]+)\)/g, `(Math.asin($1)${fromRad})`)
-          .replace(/acos\(([^)]+)\)/g, `(Math.acos($1)${fromRad})`)
-          .replace(/atan\(([^)]+)\)/g, `(Math.atan($1)${fromRad})`);
+        // NOTE: We replace only the function-name prefix (e.g. sin( -> Math.sin() 
+        // and inject angle-conversion multipliers inside the argument.
+        // We do NOT use [^)]+ regex to capture arguments because it breaks on
+        // nested expressions like sin(cos(x)). JavaScript's own evaluator handles
+        // the parenthesis matching after the prefix substitution.
+        if (this.angleMode === 'DEG') {
+          // DEG mode: inject degree-to-radian conversion inside each trig call.
+          // Wrap the trig call with a multiplier applied to the raw argument.
+          // Strategy: replace "sin(" with a DEG-aware wrapper using a helper.
+          // We use a named helper so JS handles the paren matching correctly.
+          code = code
+            .replace(/\basin\(/g, '__asin_deg(')
+            .replace(/\bacos\(/g, '__acos_deg(')
+            .replace(/\batan\(/g, '__atan_deg(')
+            .replace(/\bsinh\(/g, 'Math.sinh(')
+            .replace(/\bcosh\(/g, 'Math.cosh(')
+            .replace(/\btanh\(/g, 'Math.tanh(')
+            .replace(/\bsin\(/g, '__sin_deg(')
+            .replace(/\bcos\(/g, '__cos_deg(')
+            .replace(/\btan\(/g, '__tan_deg(');
+        } else {
+          // RAD mode: plain Math.* prefix substitution; no conversion needed.
+          code = code
+            .replace(/\basin\(/g, 'Math.asin(')
+            .replace(/\bacos\(/g, 'Math.acos(')
+            .replace(/\batan\(/g, 'Math.atan(')
+            .replace(/\bsinh\(/g, 'Math.sinh(')
+            .replace(/\bcosh\(/g, 'Math.cosh(')
+            .replace(/\btanh\(/g, 'Math.tanh(')
+            .replace(/\bsin\(/g, 'Math.sin(')
+            .replace(/\bcos\(/g, 'Math.cos(')
+            .replace(/\btan\(/g, 'Math.tan(');
+        }
 
         // 10. Binary functions: gcd, lcm, mod, nPr, nCr
         code = code
@@ -499,21 +518,35 @@
           .replace(/(\d+(\.\d+)?|\([^)]+\))\s+P\s+(\d+(\.\d+)?|\([^)]+\))/g, 'nPr($1, $3)')
           .replace(/(\d+(\.\d+)?|\([^)]+\))\s+C\s+(\d+(\.\d+)?|\([^)]+\))/g, 'nCr($1, $3)');
 
-        // 11. Implicit multiplication: 2(3) -> 2*(3), (2)(3) -> (2)*(3), 2π -> 2*π
+        // 11. Implicit multiplication: 2(3) -> 2*(3), (2)(3) -> (2)*(3), 2π -> 2*π, 2Math.sqrt -> 2*Math.sqrt
         code = code
           .replace(/(\d)(\()/g, '$1*$2')
           .replace(/(\))(\d)/g, '$1*$2')
           .replace(/(\))(\()/g, '$1*$2')
           .replace(/(\d)(\(Math\.PI\)|\(Math\.E\))/g, '$1*$2')
-          .replace(/(\(Math\.PI\)|\(Math\.E\))(\d)/g, '$1*$2');
+          .replace(/(\(Math\.PI\)|\(Math\.E\))(\d)/g, '$1*$2')
+          .replace(/(\d)(Math\.[a-zA-Z]+)/g, '$1*$2')
+          .replace(/(\))(Math\.[a-zA-Z]+)/g, '$1*$2');
 
-        // Evaluate inside a safe sandbox with math helpers in scope
+        // Evaluate inside a safe sandbox with math helpers in scope.
+        // DEG-mode trig wrappers (__sin_deg, etc.) are injected as extra args.
+        const __sin_deg = (x) => Math.sin(x * Math.PI / 180);
+        const __cos_deg = (x) => Math.cos(x * Math.PI / 180);
+        const __tan_deg = (x) => Math.tan(x * Math.PI / 180);
+        const __asin_deg = (x) => Math.asin(x) * 180 / Math.PI;
+        const __acos_deg = (x) => Math.acos(x) * 180 / Math.PI;
+        const __atan_deg = (x) => Math.atan(x) * 180 / Math.PI;
+
         const runner = new Function(
           'Math', 'factorial', 'gcd', 'lcm', 'nPr', 'nCr',
+          '__sin_deg', '__cos_deg', '__tan_deg', '__asin_deg', '__acos_deg', '__atan_deg',
           `"use strict"; return (${code});`
         );
 
-        const result = runner(Math, factorial, gcd, lcm, nPr, nCr);
+        const result = runner(
+          Math, factorial, gcd, lcm, nPr, nCr,
+          __sin_deg, __cos_deg, __tan_deg, __asin_deg, __acos_deg, __atan_deg
+        );
         return isFinite(result) ? result : null;
       } catch (err) {
         console.warn('Evaluation parse error:', err, 'for expression:', expr);

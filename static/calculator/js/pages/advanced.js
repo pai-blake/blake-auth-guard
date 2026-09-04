@@ -291,8 +291,23 @@
           calc.matrixDeterminant(matrix);
         } else if (currentAction === 'eval') {
           const formula = document.getElementById('adv-eval-formula').value;
-          const x = document.getElementById('adv-eval-x').value;
-          calc.differentiate(formula, x); // or direct evaluation
+          const x = parseFloat(document.getElementById('adv-eval-x').value);
+          // Substitute x into the formula and evaluate
+          const subbed = formula.replace(/\bx\b/gi, `(${x})`);
+          const result = calc.evaluateFormula(subbed);
+          if (result === null || isNaN(result) || !isFinite(result)) {
+            calc.showToast('Invalid formula or value for f(x)', 'error');
+          } else {
+            const formatted = calc.formatResult(result);
+            const label = `f(${x}) = ${formula}`;
+            calc.expression = label;
+            calc.lastResult = formatted;
+            calc.isEvaluated = true;
+            calc.addHistoryEntry(label, formatted);
+            calc.updateDisplay();
+            if (window.UI) window.UI.updateResult(formatted);
+          }
+
         }
 
         dialog.close();

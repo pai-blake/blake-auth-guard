@@ -47,16 +47,39 @@ def _get_smtp_connection(user: str, pass_: str):
 
     context = ssl.create_default_context()
 
-    if smtp_secure or smtp_port == 465:
-        server = smtplib.SMTP_SSL(smtp_host, smtp_port, context=context, timeout=15)
-    else:
-        server = smtplib.SMTP(smtp_host, smtp_port, timeout=15)
+    def _connect_ssl(host, port):
+        """Try SMTP_SSL (port 465)."""
+        server = smtplib.SMTP_SSL(host, port, context=context, timeout=15)
+        server.login(user, pass_)
+        return server
+
+    def _connect_starttls(host, port):
+        """Try SMTP + STARTTLS (port 587)."""
+        server = smtplib.SMTP(host, port, timeout=15)
         server.ehlo()
         server.starttls(context=context)
         server.ehlo()
+        server.login(user, pass_)
+        return server
 
-    server.login(user, pass_)
-    return server
+    if smtp_secure or smtp_port == 465:
+        try:
+            return _connect_ssl(smtp_host, smtp_port)
+        except (OSError, ConnectionRefusedError, TimeoutError) as primary_err:
+            # Port 465 blocked (common on Vercel/serverless) — try 587 with STARTTLS
+            print(f'[Email] Port 465 failed ({primary_err}), trying port 587 with STARTTLS...')
+            try:
+                return _connect_starttls(smtp_host, 587)
+            except Exception as fallback_err:
+                raise ConnectionError(
+                    f'SMTP connection failed on both port 465 ({primary_err}) '
+                    f'and port 587 ({fallback_err}). '
+                    f'If deploying on Vercel, SMTP may be blocked — '
+                    f'consider using a transactional email API (Resend, SendGrid) instead.'
+                ) from fallback_err
+    else:
+        return _connect_starttls(smtp_host, smtp_port)
+
 
 def init_transporter():
     global _is_configured

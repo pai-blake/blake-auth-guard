@@ -82,7 +82,7 @@ def create_app():
         # Adjust trusted sources as needed.
         csp_directives = [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-inline' https://accounts.google.com https://apis.google.com",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://accounts.google.com https://apis.google.com",
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "font-src 'self' https://fonts.gstatic.com",
             "img-src 'self' data: https:",
@@ -138,3 +138,11 @@ def create_app():
 
 
 app = create_app()
+
+# Initialize email transporter here so it runs on both server.py and Vercel
+# (Vercel uses app.py directly as the WSGI entry point, so server.py is skipped)
+try:
+    from config.email_config import init_transporter as _init_email
+    _init_email()
+except Exception:
+    pass

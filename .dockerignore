@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+*.pyo
+.env
+database/authguard.db
+*.db
+*.sqlite3
+scratch/
+.git
+.gitignore
+.vscode/
+.idea/
